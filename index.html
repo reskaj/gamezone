@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#090b10">
+<title>GAMEZONE v11 — 18 ігор</title>
+<style>
+:root{--bg:#090b10;--panel:#11151e;--panel2:#171d29;--text:#f4f7fb;--muted:#9ba6b8;--accent:#b8ff3b;--line:rgba(255,255,255,.09)}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:radial-gradient(ellipse at 80% 0%,rgba(105,255,59,.08),transparent 34%),var(--bg);color:var(--text);font-family:Inter,Segoe UI,Arial,sans-serif}
+a{color:inherit;text-decoration:none}
+button,input{font:inherit}
+.container{width:min(1160px,92%);margin:auto}
+header{position:sticky;top:0;z-index:20;background:rgba(9,11,16,.86);backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}
+.nav{height:76px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.logo{font-size:24px;font-weight:950;letter-spacing:-1px}.logo span{color:var(--accent)}
+nav{display:flex;gap:26px;color:#c4ccda;font-size:14px}nav a:hover{color:var(--accent)}
+.nav-cta,.primary{border:0;background:var(--accent);color:#11160a;font-weight:850;padding:12px 17px;border-radius:10px;cursor:pointer;transition:.2s}
+.nav-cta:hover,.primary:hover{transform:translateY(-2px);box-shadow:0 8px 28px #b8ff3b35}
+.hero{padding:72px 0 48px;display:grid;grid-template-columns:1.05fr .95fr;gap:42px;align-items:center}
+.eyebrow{color:var(--accent);text-transform:uppercase;letter-spacing:2.5px;font-size:12px;font-weight:900;display:flex;align-items:center;gap:9px}
+.eyebrow:before{content:"";height:2px;width:25px;background:var(--accent)}
+h1{font-size:clamp(42px,6vw,76px);line-height:.99;letter-spacing:-3.5px;margin:20px 0}
+h1 span{color:var(--accent)}
+.hero p{color:var(--muted);font-size:17px;line-height:1.7;max-width:530px}
+.hero-actions{display:flex;gap:12px;align-items:center;margin-top:28px;flex-wrap:wrap}
+.secondary{border:1px solid #ffffff24;background:#ffffff06;color:white;padding:12px 17px;border-radius:10px;font-weight:750;cursor:pointer}
+.hero-stats{display:flex;gap:28px;margin-top:35px}.stat strong{display:block;font-size:22px}.stat small{color:var(--muted)}
+.hero-art{position:relative;min-height:380px;border-radius:24px;overflow:hidden;border:1px solid #ffffff19;background:linear-gradient(145deg,#1e2939,#0c1119 55%,#18251a);display:flex;align-items:center;justify-content:center}
+.hero-art:before{content:"";position:absolute;width:300px;height:300px;border-radius:50%;background:#b8ff3b24;filter:blur(50px);right:5%;top:8%}
+.hero-art img{width:100%;height:100%;min-height:380px;object-fit:cover;position:absolute;inset:0;opacity:.64}
+.hero-art:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#090b10b8,transparent 80%),linear-gradient(0deg,#090b10b8,transparent 55%)}
+.art-label{position:absolute;z-index:2;left:26px;bottom:24px}.art-label small{color:var(--accent);letter-spacing:2px;font-weight:800}.art-label h2{font-size:32px;margin:8px 0}.art-label p{margin:0;color:#d1d7e1;font-size:13px}
+section{padding:46px 0}
+.section-head{display:flex;justify-content:space-between;align-items:end;gap:20px;margin-bottom:24px}
+.section-head h2{font-size:clamp(27px,4vw,38px);letter-spacing:-1.3px;margin:9px 0 0}
+.section-head p{color:var(--muted);margin:0;font-size:14px}
+.toolbar{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:22px}
+.search{flex:1;min-width:220px;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:13px 15px;color:white;outline:none}
+.search:focus{border-color:var(--accent)}
+.filters{display:flex;gap:8px;flex-wrap:wrap}
+.filter{background:var(--panel);border:1px solid var(--line);color:#c2cad7;border-radius:9px;padding:10px 13px;cursor:pointer}
+.filter.active,.filter:hover{background:var(--accent);color:#10150a;border-color:var(--accent);font-weight:800}
+
+.sort-wrap{display:flex;align-items:center;gap:9px;color:var(--muted);font-size:13px;white-space:nowrap}
+.sort-wrap select{background:var(--panel2);color:var(--text);border:1px solid var(--line);border-radius:10px;padding:10px 12px;outline:none;max-width:100%}
+.sort-wrap select:focus{border-color:var(--accent)}
+@media(max-width:700px){.sort-wrap{width:100%;justify-content:space-between}.sort-wrap select{flex:1;max-width:65%}}
+.games{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.game-card{background:var(--panel);border:1px solid var(--line);border-radius:16px;overflow:hidden;transition:transform .22s,border-color .22s}
+.game-card:hover{transform:translateY(-5px);border-color:#b8ff3b80}
+.cover{height:180px;position:relative;background:linear-gradient(135deg,#1d2937,#10141c);overflow:hidden}
+.cover img{width:100%;height:100%;object-fit:cover;transition:transform .4s}.game-card:hover .cover img{transform:scale(1.05)}
+.favorite-toggle{position:absolute;right:12px;top:10px;z-index:2;width:36px;height:36px;border-radius:50%;border:1px solid #ffffff35;background:#090b10d9;color:#fff;font-size:19px;cursor:pointer;display:grid;place-items:center;transition:.2s}.favorite-toggle:hover{transform:scale(1.1)}.favorite-toggle.active{color:#ff5b78;background:#35131d;border-color:#ff5b78}.genre{position:absolute;left:12px;top:12px;background:#090b10d9;border:1px solid #ffffff20;border-radius:7px;padding:6px 9px;font-size:11px;font-weight:800}
+.card-body{padding:17px}.card-title{display:flex;justify-content:space-between;gap:10px;align-items:start}.card-title h3{font-size:18px;margin:0 0 8px}.rating{color:var(--accent);font-weight:900;white-space:nowrap}.card-body p{font-size:13px;line-height:1.6;color:var(--muted);min-height:42px;margin:7px 0 15px}
+.card-foot{border-top:1px solid var(--line);padding-top:13px;display:flex;justify-content:space-between;align-items:center;color:#c2cad7;font-size:12px}.details{color:var(--accent);font-weight:800;cursor:pointer;background:none;border:0;padding:0}
+.empty{display:none;color:var(--muted);padding:30px;text-align:center;border:1px dashed var(--line);border-radius:14px}
+.feature-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.feature{padding:22px;background:linear-gradient(145deg,var(--panel2),var(--panel));border:1px solid var(--line);border-radius:15px}
+.feature .icon{font-size:25px}.feature h3{margin:14px 0 8px}.feature p{color:var(--muted);font-size:14px;line-height:1.65;margin:0}
+.banner{margin:20px auto 70px;padding:32px;border-radius:20px;border:1px solid #b8ff3b30;background:linear-gradient(110deg,#b8ff3b12,#11151e 60%);display:flex;justify-content:space-between;align-items:center;gap:20px}
+.banner h2{margin:0 0 8px;font-size:clamp(22px,4vw,32px)}.banner p{margin:0;color:var(--muted)}
+footer{border-top:1px solid var(--line);padding:26px 0;color:var(--muted);font-size:13px}.footer-row{display:flex;justify-content:space-between;gap:15px;flex-wrap:wrap}
+dialog{max-width:560px;width:calc(100% - 30px);background:linear-gradient(145deg,#171d29,#0d1118);color:white;border:1px solid #b8ff3b45;border-radius:20px;padding:26px;box-shadow:0 24px 90px #0009}dialog h2{font-size:30px;letter-spacing:-.8px;margin-bottom:12px}.detail-meta{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:20px 0}.meta-box{background:#ffffff08;border:1px solid #ffffff12;border-radius:12px;padding:12px}.meta-box small{display:block;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}.meta-box strong{font-size:13px;line-height:1.5}.dialog-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}.dialog-link{display:inline-block;background:var(--accent);color:#10150a;border-radius:10px;padding:12px 16px;font-weight:850}.dialog-note{font-size:12px;color:var(--muted);margin-top:14px}dialog::backdrop{background:#000b;backdrop-filter:blur(4px)}dialog h2{margin-top:0}dialog p{color:var(--muted);line-height:1.7}.close{float:right;background:#ffffff12;color:white;border:1px solid var(--line);border-radius:8px;padding:7px 11px;cursor:pointer}
+@media(max-width:800px){.hero{grid-template-columns:1fr;padding-top:48px}.hero-art{min-height:290px}.hero-art img{min-height:290px}.games{grid-template-columns:repeat(2,1fr)}nav{gap:12px}.nav-cta{display:none}}
+@media(max-width:560px){.nav{height:64px}nav{display:none}h1{letter-spacing:-2px}.games,.feature-grid{grid-template-columns:1fr}.cover{height:205px}.hero-stats{gap:18px}.banner{align-items:flex-start;flex-direction:column}.section-head{align-items:flex-start;flex-direction:column}.hero{gap:25px}}
+
+
+/* Перемикач теми */
+#themeToggle{padding:10px 14px;border:1px solid #555;border-radius:10px;background:#252525;color:#fff;cursor:pointer;font-size:14px;white-space:nowrap}
+#themeToggle:hover{opacity:.85}
+/* Світла тема: використовуємо ті самі змінні, що й оригінальний дизайн */
+body.light-theme{--bg:#f3f4f6;--panel:#fff;--panel2:#e9edf3;--text:#19202b;--muted:#4b596c;--line:rgba(21,31,46,.15);background:#f3f4f6;color:var(--text)}
+body.light-theme header{background:rgba(255,255,255,.96)}
+body.light-theme nav{color:#344055}
+body.light-theme .logo,body.light-theme h1,body.light-theme h2,body.light-theme h3{color:var(--text)}
+body.light-theme .search{color:var(--text);background:#fff}
+body.light-theme .filter{color:#344055;background:#fff}
+body.light-theme .filter.active,body.light-theme .filter:hover{background:var(--accent);color:#11160a}
+body.light-theme .game-card{background:#fff}
+body.light-theme .card-foot{color:#4b596c}
+body.light-theme .feature{background:#fff;color:var(--text)}
+body.light-theme .banner{background:linear-gradient(110deg,#e9f7d8,#fff 65%);color:var(--text)}
+body.light-theme .secondary{color:var(--text);background:#fff;border-color:#ccd3df}
+body.light-theme .nav-cta,body.light-theme .primary,body.light-theme .dialog-link{background:var(--accent);color:#11160a}
+body.light-theme #themeToggle{background:#252525;color:#fff;border-color:#555}
+body.light-theme .rating,body.light-theme .details,body.light-theme .eyebrow{color:#397300}
+body.light-theme .genre{color:#fff;background:#090b10d9}
+body.light-theme .favorite-toggle{color:#fff;background:#090b10d9}
+body.light-theme .favorite-toggle.active{color:#ff5b78;background:#35131d}
+body.light-theme .hero-art{color:#fff}
+body.light-theme .hero-art .art-label h2,body.light-theme .hero-art .art-label p{color:#fff}
+body.light-theme .hero-art .art-label small{color:var(--accent)}
+body.light-theme dialog{background:#fff;color:var(--text);border-color:#c9d8b0}
+body.light-theme dialog h2{color:var(--text)}
+body.light-theme .meta-box{background:#f3f4f6;border-color:#d9dde5}
+body.light-theme .close{background:#e9edf3;color:var(--text)}
+body.light-theme footer{color:var(--muted)}
+
+
+/* GAMEZONE v8 — анімації, що не заважають користуванню */
+@keyframes gzRise {from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+@keyframes gzGlow {0%,100%{box-shadow:0 0 0 rgba(184,255,59,0)}50%{box-shadow:0 0 28px rgba(184,255,59,.18)}}
+.hero > div:first-child{animation:gzRise .75s ease both}
+.hero-art{animation:gzRise .85s .12s ease both;transition:transform .35s ease,box-shadow .35s ease}
+.hero-art:hover{transform:translateY(-4px);box-shadow:0 18px 48px rgba(0,0,0,.22)}
+.game-card{transition:transform .3s ease,box-shadow .3s ease,border-color .3s ease}
+.game-card:hover{transform:translateY(-8px);box-shadow:0 16px 36px rgba(0,0,0,.22)}
+.feature{transition:transform .3s ease,box-shadow .3s ease,border-color .3s ease}
+.feature:hover{transform:translateY(-6px);box-shadow:0 14px 30px rgba(0,0,0,.14);border-color:rgba(184,255,59,.55)}
+.primary,.secondary,.nav-cta,.filter,#themeToggle,.details{transition:transform .2s ease,background-color .2s ease,box-shadow .2s ease,color .2s ease}
+.primary:hover,.secondary:hover,.nav-cta:hover,#themeToggle:hover{transform:translateY(-3px)}
+.primary:active,.secondary:active,.nav-cta:active,.filter:active,#themeToggle:active{transform:scale(.97)}
+.favorite-toggle.active{animation:gzGlow .5s ease}
+.gz-reveal{opacity:0;transform:translateY(24px);transition:opacity .65s ease,transform .65s ease}
+.gz-reveal.gz-visible{opacity:1;transform:translateY(0)}
+@media(prefers-reduced-motion:reduce){.hero>div:first-child,.hero-art,.favorite-toggle.active{animation:none!important}.gz-reveal{opacity:1;transform:none;transition:none!important}.game-card,.feature,.primary,.secondary,.nav-cta,.filter,#themeToggle{transition:none!important}}
+
+
+/* GAMEZONE v9 — виразні анімації */
+@keyframes gzLogoPulse {
+  0%,100% { filter:drop-shadow(0 0 0 transparent); }
+  50% { filter:drop-shadow(0 0 13px rgba(184,255,59,.8)); }
+}
+@keyframes gzButtonPulse {
+  0%,100% { box-shadow:0 0 0 0 rgba(184,255,59,.16); }
+  50% { box-shadow:0 0 0 9px rgba(184,255,59,0),0 0 24px rgba(184,255,59,.36); }
+}
+@keyframes gzCardEnter {
+  from { opacity:0; transform:translateY(45px) scale(.94); }
+  to { opacity:1; transform:translateY(0) scale(1); }
+}
+.logo span { display:inline-block; animation:gzLogoPulse 2.5s ease-in-out infinite; }
+.hero-actions .primary { animation:gzButtonPulse 2.3s ease-in-out infinite; }
+.game-card { animation:gzCardEnter .7s cubic-bezier(.2,.8,.2,1) both; }
+.game-card:nth-child(2) { animation-delay:.12s; }
+.game-card:nth-child(3) { animation-delay:.24s; }
+.game-card:nth-child(4) { animation-delay:.36s; }
+.game-card:nth-child(5) { animation-delay:.48s; }
+.game-card:nth-child(6) { animation-delay:.60s; }
+.game-card:hover {
+  transform:translateY(-14px) scale(1.035) !important;
+  border-color:var(--accent) !important;
+  box-shadow:0 20px 45px rgba(184,255,59,.25),0 12px 28px rgba(0,0,0,.3) !important;
+  position:relative;
+  z-index:3;
+}
+.game-card .cover img { transition:transform .5s ease,filter .5s ease; }
+.game-card:hover .cover img { transform:scale(1.13) rotate(.6deg); filter:saturate(1.22); }
+.feature:hover { transform:translateY(-11px) scale(1.025); box-shadow:0 16px 36px rgba(184,255,59,.18); }
+#themeToggle:hover,.primary:hover,.secondary:hover,.nav-cta:hover { transform:translateY(-5px) scale(1.05); }
+@media(prefers-reduced-motion:reduce) {
+  .logo span,.hero-actions .primary,.game-card { animation:none !important; }
+  .game-card:hover,.feature:hover,#themeToggle:hover,.primary:hover,.secondary:hover,.nav-cta:hover { transform:none !important; }
+}
+
+
+/* GAMEZONE v10: анімації при появі в зоні видимості */
+.logo span { animation:gzLogoBright 1.8s ease-in-out infinite !important; }
+@keyframes gzLogoBright {
+  0%,100% { text-shadow:0 0 5px #b8ff3b,0 0 10px rgba(184,255,59,.55); filter:brightness(1); }
+  50% { text-shadow:0 0 12px #b8ff3b,0 0 28px #b8ff3b,0 0 45px rgba(184,255,59,.8); filter:brightness(1.3); }
+}
+.game-card { animation:none !important; }
+.game-card.gz-card-waiting { opacity:0; transform:translateY(55px) scale(.91); }
+.game-card.gz-card-show { animation:gzCardScroll .75s cubic-bezier(.17,.85,.25,1) both !important; }
+@keyframes gzCardScroll { from {opacity:0;transform:translateY(55px) scale(.91)} to {opacity:1;transform:translateY(0) scale(1)} }
+.game-card.gz-card-show:hover { animation:none !important; opacity:1; transform:translateY(-14px) scale(1.035) !important; }
+@media(prefers-reduced-motion:reduce){.logo span,.game-card.gz-card-show{animation:none!important}.game-card.gz-card-waiting{opacity:1;transform:none}}
+
+.cover { background:linear-gradient(135deg,#283c40,#18271d 50%,#253044); }
+.cover:has(img[style*="display: none"])::after { content:"🎮 GAMEZONE"; position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);color:#b8ff3b;font-weight:900;letter-spacing:2px;white-space:nowrap; }
+
+/* GAMEZONE v12 — порівняння ігор */
+.compare-add{margin-top:12px;width:100%;border:1px solid var(--line);background:var(--panel2);color:var(--text);border-radius:9px;padding:10px 12px;font-weight:750;cursor:pointer;transition:transform .2s,border-color .2s,background .2s}
+.compare-add:hover{transform:translateY(-2px);border-color:var(--accent)}
+.compare-add.selected{background:var(--accent);border-color:var(--accent);color:#10150a}
+.compare-tray{position:fixed;z-index:35;bottom:18px;left:50%;transform:translateX(-50%);width:min(760px,94vw);padding:14px 18px;border:1px solid var(--accent);border-radius:16px;background:#171d29;color:#f4f7fb;box-shadow:0 12px 42px #0008;display:none;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.compare-tray.open{display:flex}
+.compare-tray .compare-selection{flex:1;min-width:170px;font-weight:700;line-height:1.5}
+.compare-tray .compare-actions{display:flex;gap:8px;flex-wrap:wrap}
+.compare-tray button{padding:10px 13px;border-radius:9px;border:1px solid #ffffff40;cursor:pointer;font-weight:800;background:#2b3340;color:#fff}
+.compare-tray #compareOpen{background:var(--accent);color:#10150a;border-color:var(--accent)}
+.compare-tray #compareOpen:disabled{opacity:.5;cursor:not-allowed}
+#compareDialog{max-width:850px;width:calc(100% - 24px);max-height:90vh;overflow:auto;background:var(--panel2);color:var(--text);border:1px solid var(--accent);border-radius:20px;padding:24px}
+#compareDialog .compare-table{width:100%;border-collapse:collapse;table-layout:fixed}
+#compareDialog th,#compareDialog td{padding:13px 9px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top;overflow-wrap:anywhere}
+#compareDialog th:first-child{width:23%}
+#compareDialog .compare-thumb{width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:10px;margin-bottom:8px}
+#compareDialog .compare-heading{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:12px}
+#compareDialog .compare-heading h2{margin:0}
+#compareDialog .compare-close{background:var(--panel);border:1px solid var(--line);color:var(--text);border-radius:8px;padding:9px 12px;cursor:pointer}
+body.light-theme .compare-add{background:#e9edf2;color:#20242b}
+body.light-theme .compare-add.selected{background:var(--accent);color:#10150a}
+body.light-theme #compareDialog{background:#fff;color:#20242b}
+body.light-theme #compareDialog .compare-close{background:#e9edf2;color:#20242b}
+@media(max-width:550px){#compareDialog{padding:14px}#compareDialog th,#compareDialog td{font-size:12px;padding:9px 5px}#compareDialog th:first-child{width:22%}}
+
+.gzone-req-btn{margin-top:10px;padding:9px 12px;border-radius:9px;background:var(--accent);color:#11160a;border:0;font-weight:800;cursor:pointer}
+.gzone-req-btn:hover{filter:brightness(1.08);transform:translateY(-2px)}
+#gzoneRequirements{width:min(750px,calc(100% - 24px));max-width:750px;max-height:88vh;overflow:auto;background:var(--panel);color:var(--text);border:1px solid var(--accent);border-radius:18px;padding:24px}
+#gzoneRequirements::backdrop{background:#000b}
+.gzone-req-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.gzone-req-panel{padding:14px;border-radius:12px;background:var(--panel2);border:1px solid var(--line)}
+.gzone-req-panel p{margin:9px 0;line-height:1.55;color:var(--text)}
+.gzone-req-link{display:inline-block;margin-top:14px;background:var(--accent);color:#11160a!important;padding:11px 14px;border-radius:10px;font-weight:800}
+@media(max-width:600px){.gzone-req-grid{grid-template-columns:1fr}}
+</style>
+
+
+</head>
+<body>
+<header>
+  <div class="container nav">
+    <a class="logo" href="#home">GAME<span>ZONE</span></a>
+    <nav aria-label="Головне меню">
+      <a href="#home">Головна</a><a href="#games">Ігри</a><a href="#features">Про сайт</a>
+    </nav>
+    <a class="nav-cta" href="#games">Дослідити ігри ↗</a>
+	<button id="themeToggle">☀️ Світла тема</button>
+  </div>
+</header>
+<main>
+  <div class="container hero" id="home">
+    <div>
+      <div class="eyebrow">Твоя територія геймінгу</div>
+      <h1>ГРА ПОЧИНАЄТЬСЯ <span>ТУТ.</span></h1>
+      <p>Відкривай нові світи, знаходь ігри під свій настрій та обирай наступну пригоду. Усе найцікавіше зі світу відеоігор — в одному місці.</p>
+      <div class="hero-actions"><a class="primary" href="#games">Знайти свою гру&nbsp; ↘</a><button class="secondary" id="randomGame" type="button">🎲 Випадкова гра</button><a class="secondary" href="#features">Що тут є?</a></div>
+      <div class="hero-stats"><div class="stat"><strong>18</strong><small>ігор у каталозі</small></div><div class="stat"><strong>04</strong><small>жанри</small></div><div class="stat"><strong>∞</strong><small>пригод</small></div></div>
+    </div>
+    <div class="hero-art">
+      <img src="https://cdn.akamai.steamstatic.com/steam/apps/1091500/header.jpg" alt="Обкладинка гри Cyberpunk 2077">
+      <div class="art-label"><small>ГРА ТИЖНЯ</small><h2>Cyberpunk 2077</h2><p>Місто майбутнього. Твоя історія.</p></div>
+    </div>
+  </div>
+
+  <section class="container" id="games">
+    <div class="section-head"><div><div class="eyebrow">Обирай пригоду</div><h2>Популярні ігри<span style="color:var(--accent)">.</span></h2></div><p>Знайди гру під свій настрій</p></div>
+    <div class="toolbar">
+      <input class="search" id="search" type="search" placeholder="🔎  Пошук гри..." aria-label="Пошук гри">
+      <div class="filters" id="filters">
+        <button class="filter active" data-genre="Усі">Усі</button><button class="filter" data-genre="Екшн">Екшн</button><button class="filter" data-genre="Гонки">Гонки</button><button class="filter" data-genre="Пісочниця">Пісочниця</button><button class="filter" data-genre="Шутер">Шутер</button><button class="filter" data-genre="Обрані">❤️ Обрані <span id="favoritesCount">0</span></button>
+      </div>
+      <label class="sort-wrap">Сортування
+        <select id="sortGames" aria-label="Сортувати ігри">
+          <option value="default">За замовчуванням</option>
+          <option value="az">Назва: А—Я</option>
+          <option value="za">Назва: Я—А</option>
+          <option value="rating">За рейтингом</option>
+        </select>
+      </label>
+    </div>
+    <div class="games" id="gamesGrid">
+      <article class="game-card" data-name="Grand Theft Auto V GTA 5" data-genre="Екшн">
+        <div class="cover"><button class="favorite-toggle" type="button" aria-label="Додати в обрані" title="Додати в обрані">♡</button><img loading="lazy" src="https://cdn.akamai.steamstatic.com/steam/apps/271590/header.jpg" alt="Обкладинка GTA V" onerror="this.style.display='none'"><span class="genre">ЕКШН · ВІДКРИТИЙ СВІТ</span></div>
+        <div class="card-body"><div class="card-title"><h3>Grand Theft Auto V</h3><span class="rating">★ 9.5</span></div><p>Величезний відкритий світ, пригоди, погоні та свобода дій.</p><div class="card-foot"><span>Rockstar Games</span><button class="details" data-title="Grand Theft Auto V" data-desc="Кримінальний екшн із відкритим світом, сюжетними місіями та GTA Online. Гра відома свободою дослідження й великою кількістю активностей." data-genre="Екшн · Відкритий світ" data-platform="PC, PlayStation, Xbox" data-year="2013" data-link="https://store.steampowered.com/app/271590/">Детальніше ↗</button></div><button class="compare-add" type="button" aria-pressed="false">⚔️ Додати до порівняння</button></div>
+      </article>
+      <article class="game-card" data-name="Minecraft" data-genre="Пісочниця">
+        <div class="cover"><button class="favorite-toggle" type="button" aria-label="Додати в обрані" title="Додати в обрані">♡</button><img loading="lazy" src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAQDAwMDAgQDAwMEBAQFBgoGBgUFBgwICQcKDgwPDg4MDQ0PERYTDxAVEQ0NExoTFRcYGRkZDxIbHRsYHRYYGRj/2wBDAQQEBAYFBgsGBgsYEA0QGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBj/wAARCAIcA8ADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD8/wCiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKK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ooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKAG0UUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUU2igB1FNooAdRTaKAHUU2igB1FNooAdRTaKAHUU2igB1FNooAdRTaKAHUU2igB1FNooAdRTaKAHUU2igB1FNooAdRTaKAHUU2igB1FNooAdRTaKAHUU2igB1FNooAdRTaRmCIWZgqgZJJwAKG7asB9YOo+IFjfyrHDsrfNIwypA7D19M/l61T1TW5Lnfb2x2wHgt/E/+A/z7Vj1+fZ7xU23QwL06y/y/z+49LD4T7VT7jtdP1S31BCI8pIoy0bdfqPUVdrz+OSSKQSROyOOjKcEV02ma2lzst7k7ZzwG6K/+B/z7V6GRcUQxVqGLdp9H0f8Ak/wf4GWIwjh70NjaoptFfYnEOoptFADqKbRQA6im0UAOoptFADqKbRQA6im0UAOoptFADqKbRQA6im0UAOoptFADqKbRQA6im0UAOoptFADqKbRQA6im0UAOoptFADqKbRQA6im0UAOoptFADqKbRQA6im0UAOoptFADqKbRQA6im0UAOoptFADqKbRQA6im0UAOoptFADqKbRQA6im0UAOoptFADqKbRQA6is2XWbSLUhaM/s0mflU+h/zx+eNCuehi6NdyjSkm4uzt0ZUoSja63HUU2iugkdRTaKAHUU2igAooooAKKKKACiiigAooooAKKKKACiiigAooqlq1wttol1IZfLbymCMDg7sHGPesq9aNGnKrLZJv7hpX0LjMqIWZgqgZJJwAKbFLHPCssTh0YZBFeYvqOoSxlJL+5dT1VpWIP60kd/fQoVhvbiNSc4SQgZ/OvgXx9T9orUXy2763/wAi+RW8z1KivMP7V1T/AKCV3/3+b/Gj+1dU/wCgld/9/m/xrX/X7D/8+X96FyHp9FeYf2rqn/QSu/8Av83+NH9q6p/0Erv/AL/N/jR/r9h/+fL+9ByHp9FFFffEBRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFVb+/hsLbzJOWPCIOrH/D3rKvXp0Kbq1XaK3Y4xcnZEtxcwWsPm3EgRM4yfWuT1PU5NQmwMpAp+RP6n3/lUN7fXF/MJJyOBhVXgL9KrV+X59xJPH3o0dKf4v18vL7/L1sPhVT96W4UUUV8sdYUUUUAbema60I8m+Z5Ez8snUr9fUfrXSKyugZWDKRkEHIIrgK0NN1WaxlCsWkgPBjz09x6H+dfaZFxTKhahjHeHR9V691+K8zhxGEUvehudhRUNrdQ3lss8DZU9R3B9D71NX6PTqRqRU4O6ezPMaadmFFFFWIKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKw/EWs3WkfZvs0cLebu3eYCcYx0wR61uVyXjb/AJcf+2n/ALLXhcS4mrhstq1aMrSVrP8A7eSHHcqf8Jlqn/PC0/75b/4qj/hMtU/54Wn/AHy3/wAVXO0V+U/6x5n/AM/2aWR0X/CZap/zwtP++W/+Ko/4TLVP+eFp/wB8t/8AFVztFH+seZ/8/wBhZHRf8Jlqn/PC0/75b/4qp7LxZqNzqVvbvDahZJVQlVbOCQOPmrlqt6V/yHbL/r4j/wDQhW+F4hzGdaEZVnZtfmFken0UUV+2GQVlatqy2SGCAhrgj6hB6n39v8mXVdSjsbYqrZncfIo7f7R9v51yDMzuWZizE5JJySa+O4l4geEX1XDP33u/5f8Ag/kduFw3P78thK3NH1jyttpdv+76JIf4fY+38vp0w6K+Ay/MK2ArKtRevVdGuzPRqU41I8sj0Ciub0fWPK22l2/7vokh/h9j7fy+nTpK/XsrzSjmNH2tLfquqf8AWz6njVaUqUrMKKKK9IyCiiigBM0ZpKKqwri5ozSUUWC4uaM0lFFguLmjNJRRYLi5ozSUUWC4uaM0lZ2o6vDY5iQeZPjIXsv1/wAK5sXi6OEpurXlaK/r7y4Qc3yxRYvr+GwtvMk5Y8IgPLH/AD3rkNTvri/V5JyOEIVV4C8dqZLLJPM0srl3Y5JNQzf8e0n+6f5V+UZ5xBVzJuEfdp9u/m/8tl+J6tLDRpRb3ZkUUUV8eecFFFFABRRRQB6zmjNUf7Y0j/oKWX/f9f8AGj+2NI/6Cll/3/X/ABr+h/rmH/5+L70Yl7NGaqQ6lp1xMIYL+1lkboiSqxP4A1arWnUhUV4NNeQC5ozSUVpYVxc0ZpKKLBcXNGaSiiwXFzRmkoosFxc0ZpKKLBcXNGaSiiwXFzRmkrH1PWltna3tQHlAwX7If6muLHY+hgaTrV3Zfi32RpTpyqPliWdR1eGyRo1Ie4xwnYZ7n/CuUmnmuJTJPI0jHux6fT0FMZmdyzMWYnJJOSTSV+TZxndfMp+9pBbL/Pu/6R7FGhGktNwooorxTcKKKKACiiigAooooAntby4s5hJBIV5yV7N9R3rq7DVIL9CIwUkUZZG6/UeorjackjxSB43ZGHRlOCK97Js+rZbLl+Km91/l2f5nPXw8aq8zvc0ZrH0zWkudlvc/LOeA38L/AOB/z7Vr1+rYHHUMdSVWhK6/FeT8zyKlOVN8shc1yXin4i6L4S1iPTdStb+WWSEThrdEZdpZl7sOcqa6yvBvjZ/yP9n/ANg9P/RklcWe4ypg8K61He6PVyLBUsbilRq7WZ2P/C7vCv8A0D9Y/wC/Uf8A8co/4Xd4V/6B+sf9+o//AI5XgtFfE/604/uvuPtv9VcB2f3nvX/C7vCv/QP1j/v1H/8AHKP+F3eFf+gfrH/fqP8A+OV4LRR/rTj+6+4P9VcB2f3nvX/C7vCv/QP1j/v1H/8AHKP+F3eFf+gfrH/fqP8A+OV4LRR/rTj+6+4P9VcB2f3nvX/C7vCv/QP1j/v1H/8AHK6Xwn430rxj9s/sy3vIvsuzf9pVVzu3YxtY/wB018wV7D8Cv+Y//wBu/wD7Vr1Mmz/F4vGQo1WuV36dk2eZnOQYTCYOdeknzK3Xu0j2LNGaSivu7Hwdxc0ZpKKLBcXNGaSiiwXFzRmkoosFxc0ZpKKLBcXNGaSiiwXFzRmkoosFxc0ZpKKLBcXNNeVIoy8jqijqzHAFZ99rNtZt5a/vpe6qeBz3PbvXN3V/dXr5nlJXOQg4Ufh+PWvmc24mw2BvTp+/Pstl6v8ARa+h10cLKpq9EbF94hAJjsVB4/1rD+Q/x/KsmDU763mMiXDsScsHO4N065+gGetVKK/O8XneNxVVVZ1GmtraJen9XPShQhBWSOos/EFvNhLlfJfpu6qf8P8APNayuroGUhlIyCDkEVwNWbW/urJ8wSkLnJQ8qfw/DrX0WW8ZVKdoYyPMu63+7Z/gc1XBJ6w0O2zRmsez1+3mwlyPJfpu6qf8P881rKyugZWDKRkEHIIr7vBZhhsbDnw80/zXqtzz6lOVN2kh2aM0lFdtjO4uaM0lFFguLmjNJRRYLi5ozSUUWC4uaM0lFFguLmjNJRRYLi5ozSUUWC4ua5Pxsc/Yf+2n/stdXXJ+Nf8Alx/7af8AstfN8Xf8imt/27/6VEqL1OTooor8TNQooooAKt6V/wAh2y/67p/6EKqUqzSW7ieFtskZ3q2M4I5FbYeoqdWM3smn+IHrGap6lfrYWZk+UyHhEJ6n/wCtXnn/AAlniD/oIf8AkJP/AImqlxrWp3U3mz3Rd8YyVXp+VfpWO44oSoyjhYSU3s2lZeejevYdOmlK89jellknmaWVy7sckmmVj2V7dTX8ccku5TnI2gdjWxX5/wC0dRuTd2z16c1NXiFFFFBoFbmj6x5O20u2/d9EkP8AD7H2/l9OmHRXdl+YVsBWVai9eq6NdmZ1KcakeWR3+aM1zej6x5W20u2/d9EkP8Psfb+X06dHX7BleZ0cxo+1pb9V1T/rZ9Txa1J0pWYuaM0lFelYyuFFFFAgooooAKKKKACiiigAopGZVUszBVAySTgCua1PWmuUa3tQUiJwX7uP6CvLzXN6GW0+eq9Xsur/AOB5m1GjKq7It6prYi/c2Mis/VpRggew9f8AP4c6zM7lmYsxOSSckmkor8lzPNa+Y1faVnp0XRf11Z7NKjGkrRCmTf8AHtJ/un+VPpk3/HtJ/un+VeY9i5fCzIooorgPFCiiigAooooAz6KKK0NDa8J/8jhZ/wDA/wD0Bq9OrzHwn/yOFn/wP/0Bq9Or9Y4E/wBwn/jf/pMTnq7hRRRX2hmFFFFABRRRQAUUUUAFFFFABSMyohZmCqBkknAApssscELSyuFRRkk1y2pavJfDyo1McIPTPLemf8K8fOM6oZbTvPWb2Xf/ACX9I3oUJVXpsWtW1lnc29lIVUH5pVOCT6A+nv3/AJ4dFFfkuY5jWx9Z1qz9F0S7I9mlSjTjyxCiiiuE0CiiigAooooAKKKKACiiigAooooAK2tN1xoR5N6zyJn5ZOpH19RWLRXbgMxr4Cr7WhKz/B+qM6lKNRWkd6rK6BlYMpGQQcgivB/jZ/yP9n/2D0/9GSV6Vp2qTWMoVizwHgpnp7j0/rXl/wAY7mG78b2U0LZU6emR3B8yTg19pmWe0Myy1qOk01eP6rujs4bw8qWYK+1meeUUV9ReFPCnhe58BaJcXHhvSJZpLCB3kks42Z2MakkkrySe9fDVqypJNo/TaVJ1HZHy7RX11/wh3hH/AKFXRP8AwBi/+Jo/4Q7wj/0Kuif+AMX/AMTWH12PY2+qPufItFfXX/CHeEf+hV0T/wAAYv8A4mj/AIQ7wj/0Kuif+AMX/wATR9dj2D6o+58i17D8Cv8AmP8A/bv/AO1a9Z/4Q7wj/wBCron/AIAxf/E1JFo+kaTn+ytKsrHzf9Z9lgWLfjpnaBnGT+Zr6DhbFKeaUopfzf8ApLPA4pwzhldWV/5f/SkSUUUV+vn4+FFFFABRRRQAUUUUAFFFFABRRRQAUU15I40LyOqKOrMcAVh33iAAmOxUNx/rWH8h/j+VefmGa4bAQ5q8rdl1fov12NaVGdR2ijWu723sog9w+M52qOS30rnL/Wri63xRfuoDxgfeYe5/w9e9ZzyPLIXkdnY9WY5Jptfm2bcUYnG3p0vch2W79X+i/E9SjhI09Xqwooor5g6wooooAKKKKACrNrf3Vk+YJSFzkoeVP4fh1qtRWlGtUozU6UmmuqFKKkrM6ez1+3mwlyPJfpu6qf8AD/PNaysroGVgykZBByCK4KrNrf3Vk+YJSFzkoeVP4fh1r7TLeM6tO0MZHmXdb/ds/wADgq4FPWGh2tFZFnr9vNhLkeS/Td1U/wCH+ea1lZWUMrBlIyCDkGvvMFmGHxsOfDzT/Neq3POqUpU3aSFooorsICiiigAooooAKKKKACiiigArk/Gv/Lj/ANtP/Za6yuT8a/8ALj/20/8AZa+b4u/5FNb/ALd/9KiVDc5OiiivxM2CiiigApsn+qb6GnU2T/VN9DQBRooorQ0LWm/8hOL8f5Gugrn9N/5CcX4/yNdBW9LY78L8D9QooorU6QooooAK29H1jyttpdt+76JIf4fY+38vp0xKK7svzCtgKyrUXr1XRrszOrSjUjyyO+ornNH1jyttpdt+76JIf4fY+38vp06Ov2DK80o5jR9rS36rqn/Wz6niVqMqUrMbRRRXpGQUUUUAFFFFABUU9xDaw+bPIETOMmo76+hsbfzJOWPCoOrH/PeuUvL2e+mEkxHAwqrwBXzmecQ0suXs4e9U7dF5v/Lf03OrD4Z1dXsT6jqk17KVUskA4CZ6+59f6VQoor8qxWKq4qo61aV5P+vuPYhBQXLEKKKK5ygpk3/HtJ/un+VPpGAZSpGQRg0nsKSurGNRWn9kt/8Ann+prM1L/R7pUi+VSgOOvc1yypNK55k8NKCuwoqn58v979BR58v979BWfKYcpcoqn58v979BR58v979BRyhykdFFFWWbPhP/AJG+z/4H/wCgNXpteYeGJY4fFdpJK4RAWBY9BlCK9Pr9W4EkvqNSN9ed/lEwqrW4UUUV9sZBRRRQAUUUUAFFFFABUFzdwWkJkncLxkL3b6Cor/UoLBQHy8jDKovX6n0Fcrc3M13cNNM2WPbsB6CvmM94jp5enSpWlU7dF6/5HXh8K6mstES32o3F9J+8bbGDlYx0H+NVKKK/LMRiKmIqOrWk3J9WevGKirRQUUUViUFFFFABRRRQAUUUUAFFFFABRRVO91O1slYO4aUDiNTz+Pp1ppX2AuUVyN5qt1dyA7zEgOQiEjvkE+p6Vp6brauPKvnCvn5ZMYB9jjp9at02lcdjbooorMQV5Z8Sv+Rrt/8Ar0X/ANDevU66HQdA0LVdOe41PRdOvZlkKCS5tkkYLgHALA8ZJ496PaKn7zPd4dp8+MSXZny1XR+JfFHibTtYtrPT/EWrWltHptjshgu5I0XNpEThQcDkk/jX0v8A8Id4R/6FXRP/AABi/wDia5XX/gz4U8Q6/Nq1xc6lavIsaCC0eNIo1RFRQqmM4GFHGa3oY2kp3qLS3+R9xiMHVcLU3rc8s+FPijxNqPxd0iz1DxFq13bSedvhnu5JEbELkZUnB5AP4V9L1594a+D/AIZ8LeKLXXtPvtWkubbfsSeWNkO5ChyAgPRj3r0GuXH1qdWopU9rHRgaNSlTcam9zjfite3unfCLV7zT7ue0uY/J2TQSGN1zMgOGHI4JH4180f8ACa+Mv+ht13/wPl/+Kr6z8S+H7LxT4XutB1CWeO2udm94GCuNrhxgkEdVHavP/wDhn/wb/wBBPXf+/wBF/wDGq6cBiqFKm41Frfsc+OwtarUUqb0t3Ok+FN7e6j8ItIvNQu57u5k87fNPIZHbEzgZY8ngAfhXUXn8H41T8NeH7Lwt4XtdB0+WeS2tt+x52DOdzlzkgAdWParl5/B+NelwvJSzqnKOzcv/AEmR5nFEXHJakZbpR/8ASolWiiiv2g/GQooooAKKKKACiiigAooqC6vLeyiDzvjP3VHJb6VnVqwowdSo0kurGouTsies6+1i2sz5a/vpe6qeBz3PbvWPfazcXW+KL91CeMD7zD3P+Hr3rMr4TNuMbXpYFf8Abz/Rfq/uPRo4HrU+4sXV9dXjZnlJXOQg4Ufh+NV6KK+CrVqlabnVk231Z6MYqKsgooorMYUUUUAFFFFABRRRQAUUUUAFFNkkEURdgSB6VX+3w/3X/If41LkluRKpGLtJlqrFrfXVm2YJSFzkoeVP4fhWb9vh/uv+Q/xo+3w/3X/If41dHFSozU6UrNdUZyq0pKzZ2Fnr1vNhLkeS/Td1U/4f55rVVlZQykMpGQQcg152t7E7hQr5Jx0FaNrfXVm2YJSFzkoeVP4fhX22V8aVI2hi1zLut/mtn+ByTwkJ60mdpRWTZ69bzYS5Hkv03dVP+H+ea1VZWUMpDKRkEHINfe4LMMPjYc+Hmn+a9VucFSlKm7SQtFFFdhAUUUUAFFRzzwW0DT3M0cMS/eeRgqjnHJNU/wC3tD/6DOn/APgQn+NZTr06btOST82NJvY0K5/xPpt7qP2X7HD5nl793zAYztx1Psa0P7e0P/oM6f8A+BCf40f29of/AEGdP/8AAhP8a87MaeEx+HlhqtRKMrbNX0afW/YaTWtjjv8AhGtb/wCfL/yIn+NZMxFvcSQSnbJGxRl64IODXo/9vaH/ANBnT/8AwIT/ABrzTVJI5dcvZYnV0ed2VlOQwLHBB9K/NOI8jwWX04TwtRybet2n+SRrC73F8+L+9+ho8+L+9+hqnRXyXKXylzz4v736GmvNGY2Abkj0qnI4jheRskKCxx7VQ/tq1/55zfkP8apU29ilTb2NGis7+2rX/nnN+Q/xo/tq1/55zfkP8avkl2L5Jdjb03/kJxfj/I10FcVaeILO3vEleKcquc4UZ6fWtT/hMdM/54Xf/fK//FVtTi0tTsw/uxszoaKwrfxXp1zdxW6Q3QaRwgLKuMk45+at2rOhNPYKKKKBhRRRQAVtaRq/lbbW6b930SQ/w+x9v5fTpi0V3ZfmFbAVlWovXqujXZmdWlGpHlkd5RSZNGTX7ofPi0UmTRk0ALWdqOrQ2WYlHmT4yF7L9f8ACqup615f7mykVn6tIMED2Hr/AJ/Dn2ZmYsxLMTkknJNfD5/xVGhfD4J3l1l0Xp3f4L1278Ng+b3p7DpZZJ5mllcs7HJJplFFfm0pOTcpO7Z6qVtEFFFFIArn9S1y7s9Ultoo4SiYwWBzyAfX3roK4zXf+Q/cf8B/9BFJmdVtLQsf8JNf/wDPG2/75b/Gj/hJr/8A5423/fLf41jUUrmHPLubP/CTX/8Azxtv++W/xpft02ofvplRWHy4QEDHXufesWtCw/49m/3v6CoqbGdWTcdS1RRRWBzBXI111cjW9Hqb0eoUUUVubhRRRQBpeHf+Rw0n/r8h/wDQxX0FXz3oUiw+KdNlYEhLqJjjrw4r6AimSaFZYnDIwyCK/ReB6kPZ1ad9bp28jhxad0ySikyaMmvuzjFopMmjJoAWsvVdVWzUwQENOR9Qnuff2/yaupa2NrW9kx3Zw0o6f8B/xrBr4TiDiqNNPDYJ3fWXb08/Pp0129DDYO/vVPuHyyyTzNLK5Z2OSTTKKK/OZScm5Sd2z1EraIKKKKQBRRRQAUUUUAFFFFABRRRQAVHNPDbxGSaRUUdyf85rMvddhhBS0xLJn7xHyj/GufnuJrqbzZ5C74xk1pGm3uOxp32vSzDy7QNCvdz948fpWQzMzFmJZickk5JpKK3UUthhRRRTA1dO1mW1xFcbpIQMDH3l+nrXSRSxzwrLE4ZGGQRXDVasr+exmDRsWTPzRk8H/wCv71nOnfVCsdlXZeEv+QLL/wBdz/6CtcLZ3sF9CZISeDhlbgiu68Jf8gWX/ruf/QVrirq0T6Dhj/fl6M3qKKK5D9JOH8ZfEP8A4RLXYtN/sf7Z5kAn8z7R5eMsy4xtP93r71z3/C7P+pZ/8nf/ALXXX+JfAOj+KtWj1DULm+iljhEIEDoq4DE91PPzGsb/AIU54Y/5/tW/7+x//EV0RdK3vLUtcvUPDPxR/wCEi8U2ujf2H9m8/f8AvftO/btRm6bBn7uOteh1xuhfDTQvD+v2+r2d3qLzwbtqzSIVO5SpyAgPQnvXZVnU5b+4S7dAqrefwfjVqql7/B+P9K+g4Q/5G1H/ALe/9JkfN8Xf8imt/wBu/wDpUStRSZNGTX7cfigtFJk0ZNAC0UmTRk0ALTXdI0LyOqKOrMcAVn3usW9odi/vpP7qngc9z271zt1fXV42Z5SVzkIOFH4fjXzObcT4bA3p0/fn2Wy9X+i19Dro4SdTV6I173XwCY7FQ3H+tYfyH+P5VhO7ySF5HZ2PVmOSabRX5rmObYnMJ81eWnRdF6L+mepSowpq0UFFFFeaahRRRQAUUUUAFFFFABRRRQAUUUUAFFFFAEF3/wAeb/h/OsytO7/483/D+dZlctf4jzcZ8a9AooorE5R8P/HzH/vD+da9Ywfy2EmM7fmx64qT+2f+nb/x/wD+tW9GSSdzswtSME+ZmrVi1vrqzbMEpC5yUPKn8PwrKs9Q+1zmPydmF3Z3Z/pV2u2hXnSkqlKTTXVaHanGpHujprPXrebCXI8l+m7qp/w/zzWqrKyhlIZSMgg5BrhKsWt9dWbZglIXOSh5U/h+Ffa5ZxnUp2hjI8y7rf7tn+BxVcCnrDQ7Sisi016CbCXI8l+m7qp/w/zzWqrhlDKwKkZBHINfeYLMMNjYc+HmpfmvVbo86pSlTdpIwfG//IiX3/bP/wBGLXj9ev8AjY/8ULff9s//AEYteQV+c8b/AO/Q/wAC/OR14b4Qooor446ArXh/49o/90fyrIrXh/49o/8AdH8qyqGVQfRRRWRkQ3f/AB4T/wDXNv5Vy9dRd/8AHhP/ANc2/lXL10UdmdFHZhRRRWxsFFFFAFvS/wDkO2X/AF3T/wBCFem15lpf/Idsv+u6f+hCvTaTNqewUUUUjQKKKKACiiq15f21kmZny3ZF5Y/hQlcD0Oiiop7iG2h82eQIucZNfv8AOpGnFzm7JdWfOJNuyJGZVUsxAUDJJ4ArndS1lrhWt7YFYicF+7j+gqtqGpy3spVSyQDgJnr7mqNfmuf8UyxN8PhHaGzfV+nZfi/I9TDYRR96e4UUUV8Ud4UUUUAFFFFABXGa7/yH7j/gP/oIrs64zXf+Q/cf8B/9BFJmVb4TOooopHMFTRXMkKFVCkE55qGik1cTVy19vm/up+R/xo+3zf3U/I/41VopcqFyo6qwtLG9tFkWZy4UeYoONpx7jpXA1vQSyQOksTlXXkEVg1t7NQ2OiUFFKwUUUUEhRRRQBb0v/kO2X/XdP/QhXrNjqM9ixCYeNjlkbp9R6GvJtL/5Dtl/13T/ANCFem1tQxNXDVFVoytJdTSMVKLUjtba5iu7cTQtlT27g+hqWuOsr2WxuPMj5U8Mh6MK6OHVbSSx+0vIIwCAynkg+nvX6pkvElDG07Vmo1Etb6LTqn+nT01PMr4WVN+7qi6zKqlmICgZJPAFc5qWsPcb7e2+WE8Fu7f4D/PtVfUdRkvpsDKwqflT+p96o18vn/FMsTfD4R2h1fWX+S/F+Wx14bCKHvT3CiiivizuCiiigAooooAKKKKACiiigAoqOaeG3iMk0ioo7k/5zXP32vSzDy7QNCvdz948fpVRi5bAbF7qdrZKwdw0oHEann8fTrXOX2qXN8cMdkXaNTwee/r2qmzMzFmJZickk5JpK3jBIdgoooqxhRRRQAVYsbG61K/jsrKLzZ5M7U3Bc4BJ5PHQGq9dB4H/AOR8sP8Atp/6LapnLli2jowlFVq9OlLaTS+92D/hB/FH/QL/API8f/xVH/CD+KP+gX/5Hj/+Kr2KivO+uz7I+6/1Twf80vvX+R4+nhHxLZOLuSwMccXzu4mThR16Nnpmuk0TxS2j6e9s1mbgtIZN5l24yAMdD6V2Grf8gC+/695P/QTXltfoPCODw+Z4SrDFQTXMu66d07nxfEkJ5Di6U8DNpuL1dn19LHaf8J//ANQn/wAj/wD2NH/Cf/8AUJ/8j/8A2NcXRX0v+qGUf8+f/Jpf/JHi/wCuOcf8/v8AyWP/AMidp/wn/wD1Cf8AyP8A/Y0f8J//ANQn/wAj/wD2NcXRR/qhlH/Pn/yaX/yQf645x/z+/wDJY/8AyJ2n/Cf/APUJ/wDI/wD9jR/wn/8A1Cf/ACP/APY1xdFH+qGUf8+f/Jpf/JB/rjnH/P7/AMlj/wDInaf8J/8A9Qn/AMj/AP2NZWs+KbnVPI+zpLZeXuz5cxO/OOuAOmP1rAorpwfDeXYOtGvQpWktneT3Vura2ZzYziXMsZRlQr1bxe6tFbO/RJ7o9V8qT+7+tHlSf3f1qzRX55/r9mH8kPul/wDJH6T/AKh5f/PP74//ACJW8qT+7+tMIwcGrlc1qettFdS29qg3KxUyN2POcD+te1k/GsqzqPH8sUlpyp3b+bf6HznEfDFDLqdOWGcm5Ozu1+iRpXV5b2cQed8Z+6o5LfSuevtYuLrfFF+6hPGB1Ye5/wAPXvWe7vI5eR2dj1Zjkmm15GbcU4nG3p0vch2W79X+i/E8GjhI09Xqwooor5c6wooooAKKKKACiiigAooooAKKKKACiiigAooooAKKzLvW7S3ysR89/RD8v5/4ZrBu9Su7zIlkwn/PNOF/+v071cabYWOlmurae2lSGeORlxkK2e4/xqjWHaSJFeI7nCjOT+Faq3tszBVkyT7GubE02paLQ4MXCTldLoT0VH58X979DR58X979DXLY4rDpP9U30NUatPNGY2Abkj0qrVRKiaGkf8fz/wDXM/zFbVYukf8AH8//AFzP8xW1XVT+E9LDfAFFFFaHQFWLW+ubNswSELnJQ8qfw/Cq9Fa0a1SjNTpSaa6oUoqSsyfxNrEd54JvIJIzHMQmMcqcOv5d/wDGvNK7PXf+QBcf8B/9CFcZW+YZjXx041K7u0rX+bf6nHKlGm7RCiiiuEQUUUUAFWNP/wCQta/9dk/9CFV6saf/AMha1/67J/6EKBrc7HVP+QFe/wDXB/8A0E15lXpuqf8AICvf+uD/APoJrzKrRvUCiiimZhRRRQBb0v8A5Dtl/wBd0/8AQhXpteZaX/yHbL/run/oQr02kzansFFFFI0Cmu6RoXkdUUdWY4AqhfaxbWZ8tf30vdVPA57nt3rnLq+urxszykrnIQcKPw/GrjTbHY1b3XyQY7FSvP8ArWH8h/j+VYju8kheR2dj1Zjkmm0VvGKWwz2y9vobK38yTljwqDqxrl7y9nvZhJMRwMBV4AqKWWSaZpZWLOxySaZXr53xDWzKXJH3afbv5v8Ay2X4nJh8NGkrvVhRRRXzx0hRRRQAUUUUAFFFZ19rFtZny1/fS91U8Dnue3emk3sBfd0jQvI6oo6sxwBXE6rPHc6vNNESUYgAkYzgAf0qS6vrq8bM8pK5yEHCj8Pxqi/+sNVOHKrmVZe6NooorI5gooooAKKKKAJ1+4PpWJW2v3B9Kq/2fD/ek/Mf4V1Si2lY65RckrGdRWj/AGfD/ek/Mf4Uf2fD/ek/Mf4VHs2R7ORnUVs2un6aZSt49yqno0ZHH1GK3E8I6TIgeO6uXU9GV1IP/jtS01uL2bOV0v8A5Dtl/wBd0/8AQhXptYVv4U062u4rhJrotG4cBmXGQc8/LW7Us0hFrcKKKKRYUUUUAFFFFABRRRQAUUUUAFFFU73U7WyVg7hpQOI1PP4+nWmlfYC5WRe67DCClpiWTP3iPlH+NY99qlzfHDHZF2jU8Hnv69qpVrGl3HYlnuJrqbzZ5C74xk1FRRWwwooooAKKKKACiiigAroPA/8AyPlh/wBtP/RbVz9dB4H/AOR8sP8Atp/6Las6vwS9Dty3/fKP+KP5o9iooorxT9dKerf8gC+/695P/QTXltepat/yAL7/AK95P/QTXltfqvh9/u9b/EvyPyfxE/3mj/hf5hRRRX6CfnYUUUUAFFFFABRRRQB69RRRX80n9OBXBah/yF7r/rs//oRrva4LUP8AkL3X/XZ//QjXRh92fIcX/wAGn6v8itRRRXUfBBRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRWZd63aW+ViPnv6Ifl/P8AwzWDd6ld3mRLJhP+eacL/wDX6d6uNNsLG9d63aW+ViPnv6Ifl/P/AAzWDd6ld3mRLJhP+eacL/8AX6d6qUVtGCQ7BUfm/wCz+tSVXqasnG1jKrNxtYk83/Z/WpbaTddKMev8qrVNasFu0LEAc8n6VhKpJpo55VJNNXNSimedD/z1T/voUCWI9JUP/AhXJZnJZmJcajeJdyos2FVyANo6Z+lRf2pff89//HR/hUN0Qb6Yj/no386irqUVbY6lFW2L8OtanbuXiudrEYzsU/0qf/hJtb/5/f8AyGn+FZNFUkkWtNEeoWErz6TazStud4UZjjGSQCasVU0v/kBWX/XBP/QRVukdK2CiiigZna7/AMgC4/4D/wChCuMrs9d/5AFx/wAB/wDQhXGUmc1b4gooopGQUUUUAFWNP/5C1r/12T/0IVXqxp//ACFrX/rsn/oQoGtzsdU/5AV7/wBcH/8AQTXmVeruiyRsjqGVhgqwyCPQ1V/svTP+gdaf9+V/wq7nVKPMeZUV6b/Zemf9A60/78r/AIUf2Xpn/QOtP+/K/wCFFyPZs8yor03+y9M/6B1p/wB+V/wo/svTP+gdaf8Aflf8KLh7Nnnul/8AIdsv+u6f+hCvTaqDT9NhImFjaRlPm3+Uo2475xxVC+15I98NmN79PNP3R7j17/8A16aTlsaQjY07m7gtITJO4XjIXu30Fc/fa3cXB2W5aCP2PzNz69vwrOmnmuJTJNIzse5P+cVHW0aaW5dgooorQYUUUUAd5RRRXGSFFFFABRRSMyqpZiFUDJJOAKAFqC5u4LSEyTuF4yF7t9BWZfa8ke+GzG9+nmn7o9x69/8A69YM081xKZJpGdj3J/zitI029x2NG+1u4uDsty0Efsfmbn17fhWVRRW6SWwwpMAnkClophYTav8AdH5UbV/uj8qWilZCsijcMy3DAEgccD6VFvf+8351Jc/8fLfh/Koq4J/Ez9NwGGpPC0m4L4V0XZC73/vN+dT2pLTEMSRjvVep7T/Xn/dp0/iRlm2HpRwdRqK27Iu0UUV3n5wFFFFABU9reXFlKXgfGfvKeQ31qCihq4HWWWr2t4ArEQyk42Mev0PetCuDrWsNcmgxHdbpo+fm6uPz61jKl2FY6aiooLiG6h82CQOmcZFS1iIKKKKACiiigAooooAKjmnht4jJNIqKO5P+c1mXuuwwgpaYlkz94j5R/jXPz3E11N5s8hd8Yya0jTb3HY077XpZh5doGhXu5+8eP0rIZmZizEsxOSSck0lFbqKWwwooopgFFFFABRRRQAUUUUAFFFFABXQeB/8AkfLD/tp/6LaufroPA/8AyPlh/wBtP/RbVnV+CXoduW/75R/xR/NHsVFFFeKfrpT1b/kAX3/XvJ/6Ca8tr1LVv+QBff8AXvJ/6Ca8tr9V8Pv93rf4l+R+T+In+80f8L/MKKKK/QT87CiiigAooooAKKKKAPXqKKK/mk/pwK4LUP8AkL3X/XZ//QjXe1wWof8AIXuv+uz/APoRrow+7PkOL/4NP1f5Faiiiuo+CCiiigAooooAKKKKACiiigAorMu9btLfKxHz39EPy/n/AIZrBu9Su7zIlkwn/PNOF/8Ar9O9XGm2Fjeu9btLfKxHz39EPy/n/hmsG71K7vMiWTCf8804X/6/TvVSitowSHYKKKKsYUUUUAFV6sVXrCt0Oev0CiiisDnCnxffP0plPi++fpVQ+JF0/iRlz/8AHzJ/vH+dMqeaGU3EhETkFjztPrUfkzf88ZP++TVtMpp3GUU/yZv+eMn/AHyaPJm/54yf98mizCzPRNGurebR7WKKVWdIUDL0Iwozx/WtGuBgLRwxEEqygYI4INbFnr1xDhLkecnTd0Yf4/55qnSfQ6UtDpqKr2t9a3i5glBbGSh4Yfh+NWKyasAUUUUAFVdT/wCQLef9cH/9BNWqq6n/AMgW8/64P/6CaDbD/wAWHqvzPOaKKKxP1oK7Lwl/yBZf+u5/9BWuNrsvCX/IFl/67n/0FaqO54PEn+5P1RvUUUVofnoUUVHNPDbxGSaRUUdyf85oAkqlfapbWIwx3y9o1PI47+nasi+16WYeXaBoV7ufvHj9KyGZmYsxLMTkknJNaxpdx2Ld7qd1eswdysRPEanj8fXpVOiitkrbDCiiimAUUUUAFFFFAHeUUUVxkhRUc08NvEZJpFRR3J/zmufvtelmHl2gaFe7n7x4/SqjFy2A177VLaxGGO+XtGp5HHf07Vzl7qd1eswdysRPEanj8fXpVRmZmLMSzE5JJyTSVvGCQ7BRRRVjCiiigAooooAKKKKAKFz/AMfLfh/Koqluf+Plvw/lUVefP4mfqWX/AO60v8MfyQVPaf68/wC7UFT2n+vP+7Tp/EjHN/8Ac6noXaKKK7z8zCiiigAooooAKKKKAJYLia1m82CQo+MZFdDZa5BcER3AEL4+8T8p/Ht3/wAa5miplBSA7yiuUsdYubMeW376LsrHkcdj27V0dreW97EXgfOPvKeCv1rCUHEksUVHNPDbxGSaRUUdyf8AOa5++16WYeXaBoV7ufvHj9KUYuWwGxe6na2SsHcNKBxGp5/H061zl9qlzfHDHZF2jU8Hnv69qpszMxZiWYnJJOSaSt4wSHYKKKKsYUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAV0Hgf8A5Hyw/wC2n/otq5+tjwrfWum+LbS9vZfKgj37n2lsZRgOBz1IqKqvBpdjsy+ShiqUpOyUo/mj2qiuf/4Tjwv/ANBT/wAgSf8AxNH/AAnHhf8A6Cn/AJAk/wDia8j2U/5WfqP9pYP/AJ/R/wDAl/mamrf8gC+/695P/QTXltdtfeMfDl1pdzbQajvlliZEXyZBliCAOVria/UvD+Ljh6119pfkfl3H2IpVsRRdKSlZPZp9fIKKKK/QD4EKKKKACiiigAooooA9eorEt/F3h26k2QakrN/dMbgn6ZHNWv7e0n/n7/8AIbf4V/NjpyXQ/o/+08H/AM/o/wDgS/zNGuC1D/kL3X/XZ/8A0I11n9vaT/z9/wDkNv8ACuRvJEl1G4ljOUeRmU+oJrahFpu6PleKcXQr0qapTUrN7NPp5EFFFFdJ8UFFFFABRRRQAUVmXet2lvlYj57+iH5fz/wzWDd6ld3mRLJhP+eacL/9fp3q402wsb13rdpb5WI+e/oh+X8/8M1g3epXd5kSyYT/AJ5pwv8A9fp3qpRW0YJDsFFFFWMKKKKACiiigAooooAKZ5a+pp9FJxT3JcU9xnlr6mqXnv6LWhWXXNXSjax9Lw5l+HxHtPbQTtb9STz39Fq3B80Qc9TVCr9t/wAey/j/ADpUNZanVn+W4bDYeM6MEnzL8mS0UUV1nyQUUUUAFFFFACqzKwZSVYHIIOCK1bPXriHCXI85Om7ow/x/zzWTRScU9wO0tb61vFzBKC2MlDww/D8asVwisysGUlWByCDgitWz164hwlyPOTpu6MP8f881jKl2FY6aqup/8gW8/wCuD/8AoJp1rfWt4uYJQWxkoeGH4fjTdT/5At5/1wf/ANBNZNWNcP8AxYeq/M85ooorE/WgrsvCX/IFl/67n/0Fa42uy8Jf8gWX/ruf/QVqo7ng8Sf7k/VG9RVa8v7ayTMz5bsi8sfwrnL3V7q8JVSYYiMbFPX6nvW8YOR+e2Na91yC3JjtwJnx94H5R+Pft/jXP3F1cXUm+4lZyOmeg+g7VDRW8YKJQUUUVQBRRRQAUUUUAFFFFABRRRQB3lZN7rkFuTHbgTPj7wPyj8e/b/Gsm91e6vCVUmGIjGxT1+p71n1jGl3FYmuLq4upN9xKzkdM9B9B2qGiithhRRRQAUUUUAFFFFABRRRQAUUUUAULn/j5b8P5VFUtz/x8t+H8qirz5/Ez9Sy//daX+GP5IKntP9ef92oKntP9ef8Adp0/iRjm/wDudT0LtFFFd5+ZhRRRQAUUUUAFFFFABRRRQAU+KWSCZZYnKupyCKZRQBLPcTXU3mzyF3xjJqKiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAcjmORXGMqQRmpbzWrq3snmSOEsuMAg4649agqpqf/ILl/D+Yr2ckxtejiadKnJqMpRuu+qRnKhTqyXOrjP8AhLdR/wCeFr/3y3/xVH/CW6j/AM8LX/vlv/iqwaK/Xzb+z8P/ACI3v+Et1H/nha/98t/8VWjLrt3HpIuhHBvKq2CDjnHv71yFbdz/AMi4v/XNP6V4OdYmrRq4aNOVlKaT81dGc8Bh017iH/8ACW6j/wA8LX/vlv8A4qj/AIS3Uf8Anha/98t/8VWDRXvGn9n4f+RG9/wluo/88LX/AL5b/wCKrYh1e5kto5GSLLKGOAe4+tcTXTWv/HjD/wBc1/lXynFeNr4WlTlQk4tt7ehlVwOHS0gidWZWDKSrA5BBwRXQabrauPKvnCvn5ZMYB9jjp9a56ivzCUVLcs7yiuY07WZbXEVxukhAwMfeX6etdJFLHPCssThkYZBFc8ouJI+iiipAKKzLvW7S3ysR89/RD8v5/wCGawbvUru8yJZMJ/zzThf/AK/TvVxpthY3rvW7S3ysR89/RD8v5/4ZrBu9Su7zIlkwn/PNOF/+v071UoraMEh2CiiirGFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFZdalZdc2I6H1/Cn/L3/t39Qq/bf8AHsv4/wA6oVftv+PZfx/nU4f4js4n/wB1j/iX5MlooorrPhAooooAKKKKACiiigAooooAVWZWDKSrA5BBwRV461df2ZPbTgTK8TIGPDDIx17/AOeaoUyX/UP/ALpqZJNam2H/AIsPVfmZ1FFFeefrAVt6Vqk1npL28ChXaXd5h5xwOMfhWJVy0/1B/wB6taKTlqeFxH/ub9UWnd5JC8js7HqzHJNNoortPz4KKKKACiiigAooooAKKKKACiiigAooooA2v+ET8Qf9A/8A8ip/8VR/wifiD/oH/wDkVP8A4qvTqK+c/tet2X4/5mnIjzH/AIRPxB/0D/8AyKn/AMVR/wAIn4g/6B//AJFT/wCKr06ij+163Zfj/mHIjzH/AIRPxB/0D/8AyKn/AMVR/wAIn4g/6B//AJFT/wCKr06ij+163Zfj/mHIjzH/AIRPxB/0D/8AyKn/AMVR/wAIn4g/6B//AJFT/wCKr06ij+163Zfj/mHIjzH/AIRPxB/0D/8AyKn/AMVQfCfiAAk2HA/6ap/8VXp1Nf8A1TfQ0LN63Zfj/mHIjzb/AIQ3xJ/0Df8AyNH/APFUf8Ib4k/6Bv8A5Gj/APiq9ZorL+26/Zfj/mHIjyb/AIQ3xJ/0Df8AyNH/APFUf8Ib4k/6Bv8A5Gj/APiq9Zoo/tuv2X4/5hyI8B1WyudP1eazvI/LmTG5cg4yoI5HHQiqddF47/5KBqH/AGz/APRa1ztenTm6kVN7vU/T8v8A91pf4V+SCtPQ9MvtV1B7ewg86RYy5XcF4yBnkj1FZldp8Mv+RtuP+vNv/Q0pVqrpQdSO6Mc2V8HU9Bn/AAhviT/oG/8AkaP/AOKobwd4jVSzadgAZP76P/4qvWaZP/x7Sf7p/lXnLOq7ey/H/M/NuRHlH/CH+I/+gd/5Gj/+Ko/4Q/xH/wBA7/yNH/8AFV6pRT/tmv2X4/5nR9XieV/8If4j/wCgd/5Gj/8AiqP+EP8AEf8A0Dv/ACNH/wDFV6pRR/bNfsvx/wAw+rxPK/8AhD/Ef/QO/wDI0f8A8VR/wh/iP/oHf+Ro/wD4qvVKKP7Zr9l+P+YfV4nlf/CH+I/+gd/5Gj/+Ko/4Q/xH/wBA7/yNH/8AFV6pRR/bNfsvx/zD6vE8r/4Q/wAR/wDQO/8AI0f/AMVSHwh4iVSx0/gcn96n/wAVXqtMl/1D/wC6f5U1nNa+y/H/ADB4eJ5d/wAId4j/AOgd/wCRo/8A4qj/AIQ7xH/0Dv8AyNH/APFV6tRS/tmv2X4/5nGeU/8ACHeI/wDoHf8AkaP/AOKo/wCEO8R/9A7/AMjR/wDxVerUUf2zX7L8f8wPKf8AhDvEf/QO/wDI0f8A8VR/wh3iP/oHf+Ro/wD4qvVqKP7Zr9l+P+YHlP8Awh3iP/oHf+Ro/wD4qj/hDvEf/QO/8jR//FV6tRR/bNfsvx/zA8p/4Q7xH/0Dv/I0f/xVB8IeIlUsdO4Ayf30f/xVerUyb/j3k/3T/Kms5rX2X4/5geV/8Ij4h/6B/wD5FT/4qj/hEfEP/QP/APIqf/FV6jRT/tit2X4/5m/skeXf8Ij4h/6B/wD5FT/4qj/hEfEP/QP/APIqf/FV6jRR/bFbsvx/zD2SPLv+ER8Q/wDQP/8AIqf/ABVH/CI+If8AoH/+RU/+Kr1Gij+2K3Zfj/mHskeXf8Ij4h/6B/8A5FT/AOKo/wCER8Q/9A//AMip/wDFV6jRR/bFbsvx/wAw9kjy7/hEfEP/AED/APyKn/xVIfCXiEAk6fwP+mqf/FV6lTZP9S/+6aFnFbsvx/zD2SPM/wDhC/E3/QN/8jR//FUf8IX4m/6Bv/kaP/4qvXKKy/tyv2X4/wCZXsYnkf8Awhfib/oG/wDkaP8A+KrN8QeGNc07w7cXl5Y+XBHt3P5qHGWAHAOepFe3Vy3xH/5Jlqf/AGy/9GpXqZHnFapmWGg0rOcF1/mXmCpJO54FRRRX9GmoV19/4e1i38CJqs1pttDDE4k8xTwxXBxnPcdq5CvaPEP/ACb5D/142f8A6FHXxvFWJlRxOAjH7VWK/FEuKdjxeiiivsigrvdP8Ma5caRazw2O6OSFHVvNQZBUEd64KvoLw7/yJ+k/9ecP/oAr878RMVPD4ei4Jaye/oZVVdHB/wDCJ+IP+gf/AORU/wDiqP8AhE/EH/QP/wDIqf8AxVenUV+Uf2vW7L8f8zLkR5j/AMIn4g/6B/8A5FT/AOKq1ZaF4nsZg0diWTPzRmZMH/x7r716JRSeb1n0X4/5hyI5aWz1VYA0WmSO5/gMsa4+p3fyzWLd6L4rvMiWzwn/ADzSVAv/AKFz0716HRSWaVV0X4/5i5EeY/8ACJ+IP+gf/wCRU/8AiqD4T8QAEmw4H/TVP/iq9OqK5bbaucZ4x+fFdWDx+IxNenQileTS+927k1LQg5voeX/8I9rH/Pn/AORF/wAaP+Ee1j/nz/8AIi/413dFfs3+puC/nn96/wDkT5v+163Zfj/mcJ/wj2sf8+f/AJEX/Gj/AIR7WP8Anz/8iL/jXd0Uf6m4L+ef3r/5EP7Xrdl+P+Zwn/CPax/z5/8AkRf8aP8AhHtY/wCfP/yIv+Nd3RR/qbgv55/ev/kQ/tet2X4/5nCf8I9rH/Pn/wCRF/xo/wCEe1j/AJ8//Ii/413dFH+puC/nn96/+RD+163Zfj/mcJ/wj2sf8+f/AJEX/Gj/AIR7WP8Anz/8iL/jXd0Uf6m4L+ef3r/5EP7Xrdl+P+Zwn/CPax/z5/8AkRf8aP8AhHtY/wCfP/yIv+Nd3RR/qbgv55/ev/kQ/tet2X4/5nCf8I9rH/Pn/wCRF/xo/wCEe1j/AJ8//Ii/413dFH+puC/nn96/+RD+163Zfj/mcJ/wj2sf8+f/AJEX/Gp08JeIJEDpYAqehE0f/wAVXaVasrr7O5V87G6+3vXk53wk6OFlVy9uU468rs7rra1tevW+2504TNeeoo17JPqun5nB/wDCH+I/+gd/5Gj/APiq4+voMEEAggg8givnyvy/D4ypiG1USVj9P4apqHtbeX6hXR6Z4c1m+0eK9tbPzIG3EP5iDOCQeCc9Qa5yvYPBn/JO7P8A3Zf/AEY1VXxMsPFSh1djq4jgpYaKf836M4//AIQ7xH/0Dv8AyNH/APFUf8Id4j/6B3/kaP8A+Kr1aiuL+2a/Zfj/AJnwB5T/AMId4j/6B3/kaP8A+Ko/4Q7xH/0Dv/I0f/xVerUUf2zX7L8f8wPKf+EO8R/9A7/yNH/8VR/wh3iP/oHf+Ro//iq9Woo/tmv2X4/5geU/8Id4j/6B3/kaP/4qj/hDvEf/AEDv/I0f/wAVXq1FH9s1+y/H/MDyn/hDvEf/AEDv/I0f/wAVQfCHiJVLHTuAMn99H/8AFV6tTJv+PeT/AHT/ACprOa19l+P+YHlf/CI+If8AoH/+RU/+KqG78L67b2E9xNY7Y442dm81DgAZJ616vWfr3/Iq6n/16S/+gGqjm9aTSaX4/wCZ24ekvax9UeH0UUV6J+ohW7ouharqdg9xY2vmxrIULb1XnAOOSPUVhV6h8OP+RVuP+vtv/QErGviJUI88dzxOII3wjXmjnv8AhEfEP/QP/wDIqf8AxVH/AAiPiH/oH/8AkVP/AIqvUaK4/wC2K3Zfj/mfB+yR5d/wiPiH/oH/APkVP/iqQ+EvEIBJ0/gf9NU/+Kr1Kmyf6l/900LOK3Zfj/mHskeZ/wDCF+Jv+gb/AORo/wD4qj/hC/E3/QN/8jR//FV65RWX9uV+y/H/ADK9jE8j/wCEL8Tf9A3/AMjR/wDxVH/CF+Jv+gb/AORo/wD4qvXKKP7cr9l+P+YexieR/wDCF+Jv+gb/AORo/wD4qj/hC/E3/QN/8jR//FV65RR/blfsvx/zD2MTyP8A4QvxN/0Df/I0f/xVH/CF+Jv+gb/5Gj/+Kr1yij+3K/Zfj/mHsYnkf/CF+Jv+gb/5Gj/+KpG8G+JFQs2m4AGT++j/APiq9dqOf/j0l/3D/Kms7rt7L8f8xexRRooorzyQooooAKKKKACiiigApr/6pvoadTX/ANU30NNbgaFFFFcwBRRRQB5j4s8J+INT8YXl9Y6f5sEmza/moucIoPBYHqDWL/wgniv/AKBX/keP/wCKr2iiu+GY1IRUUlp/Xc92jxBiKVONOMY2SS2fT5ni/wDwgniv/oFf+R4//iq6fwL4a1vRvEU11qVl5ETWzRhvMRssWU4wCewNeg0UqmYVKkXBpa/13JxGfYivTlSlFWfr/mFMn/49pP8AdP8AKn0yf/j2k/3T/KuKO6PEGUUUVZ3BRRRQAUUUUAFFFFABTJf9Q/8Aun+VPpkv+of/AHT/ACprcT2JaKKKR5gUUUUAFFFFABRRRQAUyb/j3k/3T/Kn0yb/AI95P90/yprcEMooopnYFFFFABRRRQAUUUUAFNk/1L/7pp1Nk/1L/wC6aa3A0KKKK5igrlviP/yTLU/+2X/o1K6muW+I/wDyTLU/+2X/AKNSvX4f/wCRphf+vkP/AEpAeBUUUV/UYBXtHiH/AJN8h/68bP8A9CjrxevaPEP/ACb5D/142f8A6FHXwvGP+9Zd/wBfo/mgPF6KKK+6AK+gvDv/ACJ+k/8AXnD/AOgCvn2voLw7/wAifpP/AF5w/wDoAr8y8Tf91of4n+RnUNKiiivxwzCiiigAooooAKp37jYkfcnNXKzLx910RxhRjivtOAsF9ZzaM3tTTl+i/F3+R5ua1eTDtd9CCiit7TvCeo6npsd9BNarHJnAdmB4JHZT6V+9TnGCvJnyiTexg0V1H/CCav8A8/Nl/wB9t/8AE0f8IJq//PzZf99t/wDE1n9Yp/zFckuxy9FdR/wgmr/8/Nl/323/AMTR/wAIJq//AD82X/fbf/E0fWKf8wckuxy9FdR/wgmr/wDPzZf99t/8TR/wgmr/APPzZf8Afbf/ABNH1in/ADByS7HL0V1H/CCav/z82X/fbf8AxNH/AAgmr/8APzZf99t/8TR9Yp/zByS7HL0V1H/CCav/AM/Nl/323/xNH/CCav8A8/Nl/wB9t/8AE0fWKf8AMHJLscvRXUf8IJq//PzZf99t/wDE0f8ACCav/wA/Nl/323/xNH1in/MHJLscvRXUf8IJq/8Az82X/fbf/E1zlzA9rezWshUvE7RsV6Eg44q4VIz+FkuLW5ZsbsRfuZThSeG9P/rVJ/YGhf8AQF07/wABk/wrNrTsbwELBKQCOFPr7V+V8c8KSfNmeCTvvNL/ANKX6/f3PpskzaUP9nnK3Z/p/kJ/YGhf9AXTv/AZP8KsrbwWtgYLaGOGJVO2ONQqjvwBU9Ml/wBQ/wDun+VfkvM21dn086k5K0ncloooqDyQooooAKKKKACiiigApk3/AB7yf7p/lT6ZN/x7yf7p/lTW4IZVHWo5JfDWoRRIzu9tIqqoyWJQ4AHrV6iqi7O53QlySUux4f8A2Drn/QG1D/wHf/Cj+wdc/wCgNqH/AIDv/hXuFFeh/aMv5T6L/WSp/Ijw/wDsHXP+gNqH/gO/+FejeALS6s/DU8V5bTW7m5ZgsqFCRsXnB7cGuqorKtjJVY8rRyY3OZ4ul7KUUgooorjPGCmyf6l/9006myf6l/8AdNNbgaFFFFcxQUUUUAFFFFABRRRQAVHP/wAekv8AuH+VSVHP/wAekv8AuH+VOO6Ezzf/AIWG/wD0CV/7/wD/ANjR/wALDf8A6BK/9/8A/wCxriaK+p+pUf5fzPt/7FwX8n4v/M7b/hYb/wDQJX/v/wD/AGNH/Cw3/wCgSv8A3/8A/sa4mij6lR/l/MP7FwX8n4v/ADO2/wCFhv8A9Alf+/8A/wDY0f8ACw3/AOgSv/f/AP8Asa4mij6lR/l/MP7FwX8n4v8AzO2/4WG//QJX/v8A/wD2NH/Cw3/6BK/9/wD/AOxriaKPqVH+X8w/sXBfyfi/8ztv+Fhv/wBAlf8Av/8A/Y0jfENyhB0len/Pf/7GuKpG+4fpR9So/wAv5i/sXBfyfi/8zvP+Flzf9AiP/v8AH/4mj/hZc3/QIj/7/H/4muEopfUKH8v5j/sXBfyfi/8AM7v/AIWXN/0CI/8Av8f/AImj/hZc3/QIj/7/AB/+JrhKKPqFD+X8w/sXBfyfi/8AM7v/AIWXN/0CI/8Av8f/AImj/hZc3/QIj/7/AB/+JrhKKPqFD+X8w/sXBfyfi/8AM7v/AIWXN/0CI/8Av8f/AImj/hZc3/QIj/7/AB/+JrhKKPqFD+X8w/sXBfyfi/8AM7v/AIWXN/0CI/8Av8f/AImkf4lStEynSEwQR/rj/wDE1wtI33D9KFgKH8v5i/sXBfyfi/8AM7r/AIWRL/0CE/7/AB/+Jo/4WRL/ANAhP+/x/wDia4aij6jQ/l/Mv+yMJ/J+L/zO5/4WRL/0CE/7/H/4mj/hZEv/AECE/wC/x/8Aia4aij6jQ/l/MP7Iwn8n4v8AzO5/4WRL/wBAhP8Av8f/AImj/hZEv/QIT/v8f/ia4aij6jQ/l/MP7Iwn8n4v/M7n/hZEv/QIT/v8f/iaP+FkS/8AQIT/AL/H/wCJrhqKPqND+X8w/sjCfyfi/wDM7n/hZEv/AECE/wC/x/8AiaR/iPIY2B0hcEf89/8A7GuHpG+4fpTWBofy/mH9kYT+T8X/AJnd/wDCyZf+gQn/AH+P/wATR/wsmX/oEJ/3+P8A8TXC0UvqND+X8zP+w8F/z7/F/wCZ3X/CyZf+gQn/AH+P/wATR/wsmX/oEJ/3+P8A8TXC0UfUaH8v5h/YeC/59/i/8zuv+Fky/wDQIT/v8f8A4mj/AIWTL/0CE/7/AB/+JrhaKPqND+X8w/sPBf8APv8AF/5ndf8ACyZf+gQn/f4//E0f8LJl/wCgQn/f4/8AxNcLRR9Rofy/mH9h4L/n3+L/AMzuv+Fky/8AQIT/AL/H/wCJpr/EiVo2B0hMEEf67/7GuHpG+4fpTWBofy/mH9h4L/n3+L/zO5/4WLJ/0CV/7/f/AGNH/CxZP+gSv/f7/wCxrh6KPqVD+X8y/wCxsH/J+L/zO4/4WLJ/0CV/7/f/AGNH/CxZP+gSv/f7/wCxrh6KPqVD+X8w/sbB/wAn4v8AzO4/4WLJ/wBAlf8Av9/9jR/wsWT/AKBK/wDf7/7GuHoo+pUP5fzD+xsH/J+L/wAzuP8AhYsn/QJX/v8Af/Y0f8LFk/6BK/8Af7/7GuHoo+pUP5fzD+xsH/J+L/zO4/4WLJ/0CV/7/f8A2NNf4iuY2B0len/Pf/7GuJpG+4fpQsFR/l/MX9jYP+T8X/md9/ws2f8A6BEf/f4/4Uf8LNn/AOgRH/3+P+FcFRU/UMP/AC/mP+x8H/J+L/zO9/4WbP8A9AiP/v8AH/CsrxJ41n1/wxc6T/Z0cPn7P3nmk42uG6Y9q5eit8NQp4atCvTj70WmvVO6B5NhP5Pxf+Zkf2Xcf34vzP8AhR/Zdx/fi/M/4Vr0V9f/AK5Zl3X3Gf8AYmF7P7zI/su4/vxfmf8ACu11DxTPffD1PDP2GNNsEMPneYT/AKsqc4x32/rWDRXnY7PcVjp0qlezdOSlHTqhrJcKt0/vZkf2Xcf34vzP+FB0u4Azvj/M/wCFa9I33D9K9H/XHMu6+4X9iYXs/vMn+y7j+/F+Z/wr0TTfHElho1pYnTFc28KRbvOxu2qBn7vtXJUV5Gb5tXzaEYYqzUXdWVhrJMJ1jf5v9Dtv+Fhv/wBAlf8Av/8A/Y0f8LDf/oEr/wB//wD7GuJorwvqVH+X8yv7FwX8n4v/ADO2/wCFhv8A9Alf+/8A/wDY0f8ACw3/AOgSv/f/AP8Asa4mij6lR/l/MP7FwX8n4v8AzO2/4WG//QJX/v8A/wD2NH/Cw3/6BK/9/wD/AOxriaKPqVH+X8w/sXBfyfi/8zuYvH0006QxaOrO7BVHn4yTwP4a3mYu5Y9Sc1574ctvtPiKDKbkizK3OMY6H/vrbXoNfp/AOW06NGriYqzk7fJa/r+B+b8aQoUMRTw9BWsrvVvd6bt9vxCtS08RazYWaWtreeXCmdq+Whxk5PJHqay6K/QJRUtGj4xNrY2/+Et8Q/8AQQ/8hJ/8TR/wlviH/oIf+Qk/+JrEoqPYw/lX3D5pdzb/AOEt8Q/9BD/yEn/xNH/CW+If+gh/5CT/AOJrEoo9jD+VfcHNLubf/CW+If8AoIf+Qk/+Jo/4S3xD/wBBD/yEn/xNYlFHsYfyr7g5pdzb/wCEt8Q/9BD/AMhJ/wDE0f8ACW+If+gh/wCQk/8AiaxKKPYw/lX3BzS7m3/wlviH/oIf+Qk/+Jo/4S3xD/0EP/ISf/E1iUUexh/KvuDml3Nv/hLfEP8A0EP/ACEn/wATR/wlviH/AKCH/kJP/iaxKKPYw/lX3BzS7m3/AMJb4h/6CH/kJP8A4mseaaS4uZJ5m3SSMXZsYySck0yiqjCMfhVhNt7hRRRVCItV8TX2lQJMNOS5h6NIJNpU+4wePf8A+tWM/wAR5DGwOkLgj/nv/wDY1tTwQ3Ns8E8YkjcYZT3rgNb0WbSpiRmS2fOyT0/2T7/z/PH5FxRwhRwk3isNT/dvdK/uv/L8tux+kcLY7CY2P1XFL96tnd+8vv3X4r5nT/8ACyZf+gQn/f4//E0f8LJl/wCgQn/f4/8AxNcLRXxf1Gh/L+Z9l/YeC/59/i/8zuv+Fky/9AhP+/x/+Jo/4WTL/wBAhP8Av8f/AImuFoo+o0P5fzD+w8F/z7/F/wCZ3X/CyZf+gQn/AH+P/wATR/wsmX/oEJ/3+P8A8TXC0UfUaH8v5h/YeC/59/i/8zuv+Fky/wDQIT/v8f8A4mj/AIWTL/0CE/7/AB/+JrhaKPqND+X8w/sPBf8APv8AF/5ndf8ACyZf+gQn/f4//E01/iRK0bA6QmCCP9d/9jXD0jfcP0prA0P5fzD+w8F/z7/F/wCZ3P8AwsWT/oEr/wB/v/saP+Fiyf8AQJX/AL/f/Y1w9FH1Kh/L+Zf9jYP+T8X/AJncf8LFk/6BK/8Af7/7Gj/hYsn/AECV/wC/3/2NcPRR9Sofy/mH9jYP+T8X/mdx/wALFk/6BK/9/v8A7Gj/AIWLJ/0CV/7/AH/2NcPRR9Sofy/mH9jYP+T8X/mdx/wsWT/oEr/3+/8AsaP+Fiyf9Alf+/3/ANjXD0UfUqH8v5h/Y2D/AJPxf+Z3H/CxZP8AoEr/AN/v/saa/wARXMbA6SvT/nv/APY1xNI33D9KFgqP8v5i/sbB/wAn4v8AzO+/4WbP/wBAiP8A7/H/AAo/4WbP/wBAiP8A7/H/AArgqKn6hh/5fzH/AGPg/wCT8X/md7/ws2f/AKBEf/f4/wCFH/CzZ/8AoER/9/j/AIVwVFH1DD/y/mH9j4P+T8X/AJne/wDCzZ/+gRH/AN/j/hR/ws2f/oER/wDf4/4VwVFH1DD/AMv5h/Y+D/k/F/5ne/8ACzZ/+gRH/wB/j/hR/wALNn/6BEf/AH+P+FcFRR9Qw/8AL+Yf2Pg/5Pxf+Z3v/CzZ/wDoER/9/j/hTZPiXM0TKdIjwQQcTH/4muEpG+4fpTWAofy/mH9j4P8Ak/F/5i1csIIpvM8xd2MY5I9ap1NBcyW+7YFO7Gc11STa0PURZvbaGG3DRptJbHUnsaoVPPdyTxhHVAAc8CoKUU0tQYVsfYbX/nl/48ax6uf2lP8A3I/yP+NKab2BFaZQtxIqjADED86ZSuxeRnOMscnFJVoRcsIIpvM8xd2MY5I9adf20MNpujTaScdSexqvBcyW+7YFO7Gc0XN3JcQbHVABzwKiz5rj0sQ1csIIpvM8xd2MY5I9ap1NBcyW+7YFO7Gc1Uk2tARZvbaGG3DRptJbHUnsaoVPPdyTxhHVAAc8CoKUU0tQYVsfYbX/AJ5f+PGsern9pT/3I/yP+NKab2BFaZQtxIqjADED86ZSuxeRnOMscnFJVoRcsIIpvM8xd2MY5I9adf20MNpujTaScdSexqvBcyW+7YFO7Gc0XN3JcQbHVABzwKiz5rj0sQ1csIIpvM8xd2MY5I9ap1NBcyW+7YFO7Gc1Uk2tARZvbaGG3DRptJbHUnsaoVPPdyTxhHVAAc8CoKUU0tQYVsfYbX/nl/48ax6uf2lP/cj/ACP+NKab2BFaZQtxIqjADED86ZSuxeRnOMscnFJVoRcsIIpvM8xd2MY5I9adf20MNpujTaScdSexqvBcyW+7YFO7Gc0XN3JcQbHVABzwKiz5rj0sQ1csIIpvM8xd2MY5I9ap1NBcyW+7YFO7Gc1Uk2tARZvbaGG3DRptJbHUnsaoVPPdyTxhHVAAc8CoKUU0tQYVsfYbX/nl/wCPGsern9pT/wByP8j/AI0ppvYEVplC3EiqMAMQPzplK7F5Gc4yxycUlWhFywgim8zzF3Yxjkj1p1/bQw2m6NNpJx1J7Gq8FzJb7tgU7sZzRc3clxBsdUAHPAqLPmuPSxDVywgim8zzF3Yxjkj1qnU0FzJb7tgU7sZzVSTa0BFm9toYbcNGm0lsdSexqhU893JPGEdUABzwKgpRTS1BhWx9htf+eX/jxrHq5/aU/wDcj/I/40ppvYEVplC3EiqMAMQPzplK7F5Gc4yxycUlWhFywgim8zzF3Yxjkj1p1/bQw2m6NNpJx1J7Gq8FzJb7tgU7sZzRc3clxBsdUAHPAqLPmuPSxDVywgim8zzF3Yxjkj1qnU0FzJb7tgU7sZzVSTa0BFm9toYbcNGm0lsdSexqhU893JPGEdUABzwKgpRTS1BhWx9htf8Anl/48ax6uf2lP/cj/I/40ppvYEVplC3EiqMAMQPzplK7F5Gc4yxycUlWhFywgim8zzF3Yxjkj1p1/bQw2m6NNpJx1J7Gq8FzJb7tgU7sZzRc3clxBsdUAHPAqLPmuPSxDVywgim8zzF3Yxjkj1qnU0FzJb7tgU7sZzVSTa0BFm9toYbcNGm0lsdSexqhU893JPGEdUABzwKgpRTS1BhWx9htf+eX/jxrHq5/aU/9yP8AI/40ppvYEVplC3EiqMAMQPzplK7F5Gc4yxycUlWhHWeDrQeXcXzAEk+UpycjueP++fyrqqzPD9t9m8O2ykJudfMJXvu5GffGB+Fadft2QYVYXAUqdtbXfq9f1sfhHEOLeKzGtUvpey9Fp+lwooor2DxgoorurDwXpd1pNrdSXF4HlhSRgrrgEqDx8tZ1KsaavIqMXLY4WivQv+EE0j/n5vf++1/+Jo/4QTSP+fm9/wC+1/8Aiax+uUyvZSPPaK9C/wCEE0j/AJ+b3/vtf/iaP+EE0j/n5vf++1/+Jo+uUw9lI89or0L/AIQTSP8An5vf++1/+Jo/4QTSP+fm9/77X/4mj65TD2Ujz2ivQv8AhBNI/wCfm9/77X/4mj/hBNI/5+b3/vtf/iaPrlMPZSPPaK9C/wCEE0j/AJ+b3/vtf/iaP+EE0j/n5vf++1/+Jo+uUw9lI89or0L/AIQTSP8An5vf++1/+Jo/4QTSP+fm9/77X/4mj65TD2Ujz2ivQv8AhBNI/wCfm9/77X/4mvPa1pVo1L8pMoOO4VXvrG31Cye1uU3I3Qjqp9QfWrFFVUpxqxcJq6e6HTqTpTVSm7NbNHmup6dNpeoG2lYNxuRx/EvY47dOlFhBFN5nmLuxjHJHrXe6ppdvqln5Mw2uOY5AOUP+HqK4ORbnSb2a1kVPMUgHuPUEfga/HuJMhnltTnp/w5PR9vJ/p3XzP2fhriCGZ0uSppVitV381+vZ/Ide20MNuGjTaS2OpPY1Qqee7knjCOqAA54FQV83FNLU+nYVsfYbX/nl/wCPGsern9pT/wByP8j/AI0ppvYEVplC3EiqMAMQPzplK7F5Gc4yxycUlWhFywgim8zzF3Yxjkj1p1/bQw2m6NNpJx1J7Gq8FzJb7tgU7sZzRc3clxBsdUAHPAqLPmuPSxDVywgim8zzF3Yxjkj1qnU0FzJb7tgU7sZzVSTa0BFm9toYbcNGm0lsdSexqhU893JPGEdUABzwKgpRTS1BhWx9htf+eX/jxrHq5/aU/wDcj/I/40ppvYEVplC3EiqMAMQPzplK7F5Gc4yxycUlWhFywgim8zzF3Yxjkj1p1/bQw2m6NNpJx1J7Gq8FzJb7tgU7sZzRc3clxBsdUAHPAqLPmuPSxDVywgim8zzF3Yxjkj1qnU0FzJb7tgU7sZzVSTa0BFm9toYbcNGm0lsdSexqhU893JPGEdUABzwKgpRTS1BhWx9htf8Anl/48ax6uf2lP/cj/I/40ppvYEVplC3EiqMAMQPzplK7F5Gc4yxycUlWhFywgim8zzF3Yxjkj1p1/bQw2m6NNpJx1J7Gq8FzJb7tgU7sZzRc3clxBsdUAHPAqLPmuPSxDRRRViCiiigAooooAKKKKACkb7h+lLSN9w/SgBaKKKACiiigAooooAKKKKACkb7h+lLSN9w/SgBaKKKACiiigAooooAKKKKACkb7h+lLSN9w/SgBaKKKACiiigAooooAKKKKACkb7h+lLSN9w/SgBaKKKACiiigAooooAKKKKACkb7h+lLSN9w/SgBaKKKACiiigAooooAKKKKACkb7h+lLSN9w/SgBaKKKACiiigAooooAKltYPtN9DbbtvmyKm7GcZOM1FW34Vg83xEsm7HlRs+Mdf4cf+PfpXbl2G+tYqnQ/maXyvr+BxZlivquEq1/5Ytr1tp+J3SIqRqiKFVRgKowAPSloor94Stoj+fW23dhRRRTEFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFZetaLDqttkYjuUHySev+yfb+X551KK58VhaWKpOjWV4s6MJi6uEqxrUJWkjyp0ZJGR1KspwVYYIPpSV3HiHQ0voHvLddt0i5IAz5oHbjv6fl9OHr8YznKKuWV/ZT1T2fdf59z9wyXOaWa0Pa09JLddn/AJdmFFFFeQewFFFFABSN9w/SlpG+4fpQAtFFFABRRRQAUUUUAFFFFABSN9w/SlpG+4fpQAtFFFABRRRQAUUUUAFFFFABSN9w/SlpG+4fpQAtFZH225/56/8Ajoo+23P/AD1/8dFXyMnnRr0Vkfbbn/nr/wCOij7bc/8APX/x0UcjDnRr0Vkfbbn/AJ6/+Oij7bc/89f/AB0UcjDnRr0Vkfbbn/nr/wCOij7bc/8APX/x0UcjDnRr0jfcP0rJ+23P/PX/AMdFOS7uGlVWkyCQDwKORhzI1aKyPttz/wA9f/HRR9tuf+ev/joo5GHOjXorI+23P/PX/wAdFH225/56/wDjoo5GHOjXorI+23P/AD1/8dFH225/56/+OijkYc6Neisj7bc/89f/AB0Ufbbn/nr/AOOijkYc6Nekb7h+lZP225/56/8AjopyXdw0qq0mQSAeBRyMOZGrRWR9tuf+ev8A46KPttz/AM9f/HRRyMOdGvRWR9tuf+ev/joo+23P/PX/AMdFHIw50a9FZH225/56/wDjoo+23P8Az1/8dFHIw50a9FZH225/56/+Oij7bc/89f8Ax0UcjDnRr0jfcP0rJ+23P/PX/wAdFOS7uGlVWkyCQDwKORhzI1aKyPttz/z1/wDHRR9tuf8Anr/46KORhzo16KyPttz/AM9f/HRR9tuf+ev/AI6KORhzo16KyPttz/z1/wDHRR9tuf8Anr/46KORhzo16KyPttz/AM9f/HRR9tuf+ev/AI6KORhzo16RvuH6Vk/bbn/nr/46Kcl3cNKqtJkEgHgUcjDmRq0Vkfbbn/nr/wCOij7bc/8APX/x0UcjDnRr0Vkfbbn/AJ6/+Oij7bc/89f/AB0UcjDnRr0Vkfbbn/nr/wCOij7bc/8APX/x0UcjDnRr0Vkfbbn/AJ6/+Oij7bc/89f/AB0UcjDnRr0jfcP0rJ+23P8Az1/8dFOS7uGlVWkyCQDwKORhzI1aKyPttz/z1/8AHRR9tuf+ev8A46KORhzo16KyPttz/wA9f/HRR9tuf+ev/joo5GHOjXorI+23P/PX/wAdFH225/56/wDjoo5GHOjXorI+23P/AD1/8dFH225/56/+OijkYc6Nekb7h+lZP225/wCev/jopyXdw0qq0mQSAeBRyMOZGrRWR9tuf+ev/joo+23P/PX/AMdFHIw50a9FZH225/56/wDjoo+23P8Az1/8dFHIw50a9FZH225/56/+Oij7bc/89f8Ax0UcjDnRr12fg+28vTJ7khwZZNoz0IUdR+JI/CvNfttz/wA9f/HRXruhW7WvhuyhkEgfygziQYIZvmIIxxgkivr+C8Jz451ntBP73p+Vz4zjjGezwCorebX3LX87GhRRRX6ofkgUUUUAFFFFABRRXoX9q+B/+eVl/wCAZ/8Aiayq1HC1otlRjfqee0V6F/avgf8A55WX/gGf/iaP7V8D/wDPKy/8Az/8TWX1iX8jK9mu557RXoX9q+B/+eVl/wCAZ/8AiaP7V8D/APPKy/8AAM//ABNH1iX8jD2a7nntFehf2r4H/wCeVl/4Bn/4mj+1fA//ADysv/AM/wDxNH1iX8jD2a7nntFehf2r4H/55WX/AIBn/wCJo/tXwP8A88rL/wAAz/8AE0fWJfyMPZruee0V6F/avgf/AJ5WX/gGf/iaP7V8D/8APKy/8Az/APE0fWJfyMPZruee0V6F/avgf/nlZf8AgGf/AImj+1fA/wDzysv/AADP/wATR9Yl/Iw9mu557RXdX+peDpNJuktY7MTtC4j22hU7tpxg7eOa4WtqdRzWqsTKNuoUUUVoSFcr4n0RfLbU7SM7s5mRRxj+/wD4/n611VFefmeW0swoOhV+T7Pv/W56OVZnWy3EKvS+a6Ndn/Wj1PKaK1vGOjzadIuo6eGFq5xKiqCsTdj7A/kD9QK5L7bc/wDPX/x0V+MY/La2BryoVd1+K7o/b8uzKjj6EcRR2f3p9n/Xma9FZH225/56/wDjoo+23P8Az1/8dFcfIzu50a9I33D9Kyfttz/z1/8AHRTku7hpVVpMgkA8CjkYcyNWisj7bc/89f8Ax0Ufbbn/AJ6/+OijkYc6Neisj7bc/wDPX/x0Ufbbn/nr/wCOijkYc6Neisj7bc/89f8Ax0Ufbbn/AJ6/+OijkYc6Neisj7bc/wDPX/x0Ufbbn/nr/wCOijkYc6Nekb7h+lZP225/56/+OinJd3DSqrSZBIB4FHIw5katFZH225/56/8Ajoo+23P/AD1/8dFHIw50a9FZH225/wCev/joo+23P/PX/wAdFHIw50a9FZH225/56/8Ajoo+23P/AD1/8dFHIw50a9FZH225/wCev/joo+23P/PX/wAdFHIw50a9I33D9Kyfttz/AM9f/HRTku7hpVVpMgkA8CjkYcyK1FFb/hr/AJev+Af1q5y5VciKu7GBRXT+I/8AkFx/9dR/I1zFKE+ZXHJWdgoorvqmpU5LaDjHmOBoqxff8hS5/wCurfzNV60TurkBT4v9en+8P51ueGv+Xr/gH9ata9/x5Qf9d1/kazdW0uWxfJpc5aiit/w1/wAvX/AP61c5cquTFXdjAorp/Ef/ACC4/wDrqP5GuYpQnzK45KzsFFFd9U1KnJbQcY8xwNFWL7/kKXP/AF1b+ZqvWid1cgKfF/r0/wB4fzrc8Nf8vX/AP61a17/jyg/67r/I1m6tpcti+TS5y1FFb/hr/l6/4B/WrnLlVyYq7sYFFdP4j/5Bcf8A11H8jXMUoT5lcclZ2Ciiu+qalTktoOMeY4GirF9/yFLn/rq38zVetE7q5AU+L/Xp/vD+dbnhr/l6/wCAf1q1r3/HlB/13X+RrN1bS5bF8mlzlqKK3/DX/L1/wD+tXOXKrkxV3YwKK6fxH/yC4/8ArqP5GuYpQnzK45KzsFFFd9U1KnJbQcY8xwNFWL7/AJClz/11b+ZqvWid1cgKfF/r0/3h/Otzw1/y9f8AAP61a17/AI8oP+u6/wAjWbq2ly2L5NLnLUUVv+Gv+Xr/AIB/WrnLlVyYq7sYFFdP4j/5Bcf/AF1H8jXMUoT5lcclZ2Ciiu+qalTktoOMeY4GirF9/wAhS5/66t/M1XrRO6uQFPi/16f7w/nW54a/5ev+Af1q1r3/AB5Qf9d1/kazdW0uWxfJpc5aiit/w1/y9f8AAP61c5cquTFXdjAorp/Ef/ILj/66j+RrmKUJ8yuOSs7BRRXfVNSpyW0HGPMcDRVi+/5Clz/11b+ZqvWid1cgKfF/r0/3h/Otzw1/y9f8A/rVrXv+PKD/AK7r/I1m6tpcti+TS5y1FFb/AIa/5ev+Af1q5y5VcmKu7GBRXT+I/wDkFx/9dR/I1zFKE+ZXHJWdgoorvqmpU5LaDjHmOP0Wz/tDxBZ2hj8xHlG9c4yg5bn6A17NXn3g+z8/xrfXbR7kt9+Gzja7Ngcd+N/+cV6DX6nwXhuTByrNazf4LT87n5NxxivaY2NBPSC/F6/lb+rBRRRX2B8WFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUANdEliaORFdGBVlYZBB6givLPFPh99G1IyQRN9hlP7ps7tpxypP549R3ODXqtMkjjmiaKVQyMMEGvGzvJ4ZlR5NprZ/o/J/8ABPcyLOqmV1+dawfxL9V5r/gHh1Fa/iPSrnStdmWZD5UrtJDJ1DKT6+ozyP6EVkV+P16FShUdKqrSW5+0YfEU8RTjVpO8Xqgp8X+vT/eH863PDX/L1/wD+tWte/48oP8Aruv8jXK6tpctjp5NLnLUUVv+Gv8Al6/4B/WrnLlVyYq7sYFFdP4j/wCQXH/11H8jXMUoT5lcclZ2Ciiu+qalTktoOMeY4GirF9/yFLn/AK6t/M1XrRO6uQFPi/16f7w/nW54a/5ev+Af1q1r3/HlB/13X+RrN1bS5bF8mlzlqKK3/DX/AC9f8A/rVzlyq5MVd2MCiun8R/8AILj/AOuo/ka5ilCfMrjkrOwUUV31TUqcltBxjzHA0VYvv+Qpc/8AXVv5mq9aJ3VyAp8X+vT/AHh/Otzw1/y9f8A/rVrXv+PKD/ruv8jWbq2ly2L5NLnLVJFPPBnyZpI89djEZ/Ko6K1IJZLm4mTbNcSyKDnDuSM1FRRQAVY+3X3/AD+XH/fw/wCNV6KTSYCszO5ZmLMTkknJJpKKKYEkU88GfJmkjz12MRn8qkFzcTSxrNcSyKGBw7kjNV6fF/r0/wB4fzpWQDKkinngz5M0keeuxiM/lUdFMCWS5uJk2zXEsig5w7kjNRUUUAFWPt19/wA/lx/38P8AjVeik0mArMzuWZizE5JJySaSiimBJFPPBnyZpI89djEZ/KpBc3E0sazXEsihgcO5IzVenxf69P8AeH86VkAypIp54M+TNJHnrsYjP5VHRTAlkubiZNs1xLIoOcO5IzUVFFABVj7dff8AP5cf9/D/AI1XopNJgKzM7lmYsxOSSckmkoopgSRTzwZ8maSPPXYxGfyqQXNxNLGs1xLIoYHDuSM1Xp8X+vT/AHh/OlZAMqSKeeDPkzSR567GIz+VR0UwJZLm4mTbNcSyKDnDuSM1FRRQAVY+3X3/AD+XH/fw/wCNV6KTSYCszO5ZmLMTkknJJpKKKYEkU88GfJmkjz12MRn8qkFzcTSxrNcSyKGBw7kjNV6fF/r0/wB4fzpWQDKkinngz5M0keeuxiM/lUdFMCWS5uJk2zXEsig5w7kjNRUUUAFWPt19/wA/lx/38P8AjVeik0mArMzuWZizE5JJySaSiimBJFPPBnyZpI89djEZ/KpBc3E0sazXEsihgcO5IzVenxf69P8AeH86VkAypIp54M+TNJHnrsYjP5VHRTAlkubiZNs1xLIoOcO5IzUVFFABVj7dff8AP5cf9/D/AI1XopNJgKzM7lmYsxOSSckmkoopgSRTzwZ8maSPPXYxGfyqQXNxNLGs1xLIoYHDuSM1Xp8X+vT/AHh/OlZAMqSKeeDPkzSR567GIz+VR0UwJZLm4mTbNcSyKDnDuSM1FRRQAVY+3X3/AD+XH/fw/wCNV6KTSYHpvgW1aLw013JsZ7qVn39WIHy4Y/UMfx966eqml2n2DRbWzKxhoolVvLHBbHJH1OT+NW6/ccsw31bCU6PZK/r1/E/BM0xX1rGVa/Rt29On4BRRRXccAUUUUAFFFFABRRRQA5EeSRY40Z3YhVVRkknsBVv+xtX/AOgVe/8Afhv8Khs7j7JqNvdbN/kyLJtzjODnGfwrrv8AhYH/AFCP/Jj/AOxrGpKon7iuVFRe7OX/ALG1f/oFXv8A34b/AAo/sbV/+gVe/wDfhv8ACuo/4WB/1CP/ACY/+xo/4WB/1CP/ACY/+xrP2lf+T8SuWHc5f+xtX/6BV7/34b/Cj+xtX/6BV7/34b/Cuo/4WB/1CP8AyY/+xo/4WB/1CP8AyY/+xo9pX/k/EOWHc5f+xtX/AOgVe/8Afhv8KP7G1f8A6BV7/wB+G/wrqP8AhYH/AFCP/Jj/AOxo/wCFgf8AUI/8mP8A7Gj2lf8Ak/EOWHc5f+xtX/6BV7/34b/Cj+xtX/6BV7/34b/Cuo/4WB/1CP8AyY/+xo/4WB/1CP8AyY/+xo9pX/k/EOWHc5f+xtX/AOgVe/8Afhv8KP7G1f8A6BV7/wB+G/wrqP8AhYH/AFCP/Jj/AOxo/wCFgf8AUI/8mP8A7Gj2lf8Ak/EOWHc5f+xtX/6BV7/34b/Cj+xtX/6BV7/34b/Cuo/4WB/1CP8AyY/+xo/4WB/1CP8AyY/+xo9pX/k/EOWHc5SbTdRt4Wmn0+6ijXq7xMoHbqRVWuo1fxh/aujTWH9neV5m35/O3YwwPTaPSuXram5te+rMmSS2CiiitCQooooAparptvq2lS2Vwq4YfI5GfLbHDD6fr0715HqWm3elag9neR7ZF5BHRx2YHuP89a9prJ8Q6LHrekNb4jW4X5oZWH3T3HHY9D+eDgV8zxFkSzCn7Wl/EitPNdv8j6rhriB5dU9jV/hSevk+/wDn/V/JYp54M+TNJHnrsYjP5VILm4mljWa4lkUMDh3JGaZdWtxZXclrdRNFNGcMjdv8+tNi/wBen+8P51+USg4tqSs0fr8ZqUVKLumMqSKeeDPkzSR567GIz+VR0UhkslzcTJtmuJZFBzh3JGaioooAKsfbr7/n8uP+/h/xqvRSaTAVmZ3LMxZickk5JNJRRTAkinngz5M0keeuxiM/lUgubiaWNZriWRQwOHckZqvT4v8AXp/vD+dKyAZUkU88GfJmkjz12MRn8qjopgSyXNxMm2a4lkUHOHckZqKiigAqx9uvv+fy4/7+H/Gq9FJpMBWZncszFmJySTkk0lFFMCSKeeDPkzSR567GIz+VSC5uJpY1muJZFDA4dyRmq9Pi/wBen+8P50rIBlFFFMAooooAKKKKACiiigAp8X+vT/eH86ZT4v8AXp/vD+dADKKKKACiiigAooooAKKKKACnxf69P94fzplPi/16f7w/nQAyiiigAooooAKKKKACiiigAp8X+vT/AHh/OmU+L/Xp/vD+dADKKKKACiiigAooooAKKKKACnxf69P94fzplPi/16f7w/nQAyiiigAooooAKKKKACiiigAp8X+vT/eH86ZT4v8AXp/vD+dADKKKKACiiigAooooAKKKKACnxf69P94fzplPi/16f7w/nQAyiiigAooooAK1vDNt9q8XWEW/ZiUSZxn7g3Y/Hbismu1+Hlm7X13qB3BEjEI+XhiSCefbaOP9oV6mS4b6zjqVPpe79Fq/yPJz3FfVcBWq9bWXq9F+Z39FFFftR+FhRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFAHO+K/Dh1q0Se12i8gB2g4HmL/AHSf5duT65HmSo8V4I5EZHV9rKwwQQeQRXt9cl4s8NSX8y6rYLunQASxADMijuPVh6dwBjpg/FcUZB7dPGYde/1Xdd/Vfj67/dcKcRfV2sFiX7j+F9n2fk/w9NvOKKKK/Nj9QCiiigAooooAKKKKACnxf69P94fzplPi/wBen+8P50AMooooAKKKKACiiigAooooAKfF/r0/3h/OmU+L/Xp/vD+dAFv7HF/ef8xR9ji/vP8AmKsUVF2BX+xxf3n/ADFH2OL+8/5irFFF2BX+xxf3n/MUfY4v7z/mKsUUXYFf7HF/ef8AMUfY4v7z/mKsUUXYFf7HF/ef8xSraRq4YM2Qc9anoouwK/2OL+8/5ij7HF/ef8xViii7Ar/Y4v7z/mKPscX95/zFWKKLsCv9ji/vP+Yo+xxf3n/MVYoouwK/2OL+8/5ij7HF/ef8xViii7Ar/Y4v7z/mKVbSNXDBmyDnrU9FF2BX+xxf3n/MUfY4v7z/AJirFFF2BX+xxf3n/MUfY4v7z/mKsUUXYFf7HF/ef8xR9ji/vP8AmKsUUXYFf7HF/ef8xR9ji/vP+YqxRRdgV/scX95/zFKtpGrhgzZBz1qeii7Ar/Y4v7z/AJij7HF/ef8AMVYoouwK/wBji/vP+Yo+xxf3n/MVYoouwK/2OL+8/wCYo+xxf3n/ADFWKKLsCv8AY4v7z/mKPscX95/zFWKKLsCv9ji/vP8AmKVbSNXDBmyDnrU9FF2BX+xxf3n/ADFH2OL+8/5irFFF2BX+xxf3n/MUfY4v7z/mKsUUXYFf7HF/ef8AMUfY4v7z/mKsUUXYFf7HF/ef8xR9ji/vP+YqxRRdgV/scX95/wAxSraRq4YM2Qc9anoouwK/2OL+8/5ij7HF/ef8xViii7Ar/Y4v7z/mKPscX95/zFWKKLsCv9ji/vP+Yo+xxf3n/MVYoouwK/2OL+8/5ij7HF/ef8xViii7Ar/Y4v7z/mKVbSNXDBmyDnrU9FF2BX+xxf3n/MUfY4v7z/mKsUUXYFf7HF/ef8xR9ji/vP8AmKsUUXYFf7HF/ef8xXpHhCxWx8Lx4EgMztKwf34GPbCg/jXn9etW8CW1nFbRklIkCKW64AxzX2vBFBTxNSq/sq33v/gHw3HWIcMLTor7Ur/cv+D+BJRRRX6YflwUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAcL4p8KKs82rWYkZHJeeMHJUnksPb19Pp05P7HF/ef8xXs1eY65Zw2Gv3FrbgiJSCoJzjKg4/WvzHi3J6eEksVR0U3qvPe68n+HTy/U+D86q4uDwlbVwWj8trPzX49fPH+xxf3n/MUfY4v7z/AJirFFfGXZ9uV/scX95/zFH2OL+8/wCYqxRRdgV/scX95/zFH2OL+8/5irFFF2BX+xxf3n/MUq2kauGDNkHPWp6KLsCv9ji/vP8AmKPscX95/wAxViii7Ar/AGOL+8/5ij7HF/ef8xViii7Ar/Y4v7z/AJij7HF/ef8AMVYoouwK/wBji/vP+Yo+xxf3n/MVYoouwK/2OL+8/wCYpVtI1cMGbIOetT0UXYH/2Q==" alt="Обкладинка Minecraft" onerror="this.style.display='none'"><span class="genre">ПІСОЧНИЦЯ · ВИЖИВАННЯ</span></div>
+        <div class="card-body"><div class="card-title"><h3>Minecraft</h3><span class="rating">★ 9.4</span></div><p>Будуй, досліджуй, створюй механізми й виживай у власному світі.</p><div class="card-foot"><span>Mojang Studios</span><button class="details" data-title="Minecraft" data-desc="Гра-пісочниця, де світ складається з блоків. Можна будувати споруди, досліджувати біоми, створювати предмети та грати разом із друзями." data-genre="Пісочниця · Виживання" data-platform="PC, PlayStation, Xbox, Switch, мобільні" data-year="2011" data-link="https://www.minecraft.net/">Детальніше ↗</button></div><button class="compare-add" type="button" aria-pressed="false">⚔️ Додати до порівняння</button></div>
+      </article>
+      <article class="game-card" data-name="Counter Strike 2 CS2" data-genre="Шутер">
+        <div class="cover"><button class="favorite-toggle" type="button" aria-label="Додати в обрані" title="Додати в обрані">♡</button><img loading="lazy" src="https://cdn.akamai.steamstatic.com/steam/apps/730/header.jpg" alt="Обкладинка Counter-Strike 2" onerror="this.style.display='none'"><span class="genre">ШУТЕР · ЗМАГАННЯ</span></div>
+        <div class="card-body"><div class="card-title"><h3>Counter-Strike 2</h3><span class="rating">★ 8.8</span></div><p>Командні матчі, точність, тактика та напружені раунди.</p><div class="card-foot"><span>Valve</span><button class="details" data-title="Counter-Strike 2" data-desc="Тактичний командний шутер, у якому важливі точність, комунікація та стратегія. Гравці змагаються в раундах за виконання цілей команди." data-genre="Шутер · Змагання" data-platform="PC (Windows, Linux)" data-year="2023" data-link="https://store.steampowered.com/app/730/">Детальніше ↗</button></div><button class="compare-add" type="button" aria-pressed="false">⚔️ Додати до порівняння</button></div>
+      </article>
+      <article class="game-card" data-name="Forza Horizon 5" data-genre="Гонки">
+        <div class="cover"><button class="favorite-toggle" type="button" aria-label="Додати в обрані" title="Додати в обрані">♡</button><img loading="lazy" src="https://cdn.akamai.steamstatic.com/steam/apps/1551360/header.jpg" alt="Обкладинка Forza Horizon 5" onerror="this.style.display='none'"><span class="genre">ГОНКИ · АВТОМОБІЛІ</span></div>
+        <div class="card-body"><div class="card-title"><h3>Forza Horizon 5</h3><span class="rating">★ 9.2</span></div><p>Яскраві пейзажі, сотні авто та швидкісні заїзди у Мексиці.</p><div class="card-foot"><span>Playground Games</span><button class="details" data-title="Forza Horizon 5" data-desc="Аркадні перегони у відкритому світі, натхненному Мексикою. Гравці збирають автомобілі, беруть участь у заїздах і досліджують різноманітні локації." data-genre="Гонки · Відкритий світ" data-platform="PC, Xbox" data-year="2021" data-link="https://store.steampowered.com/app/1551360/">Детальніше ↗</button></div><button class="compare-add" type="button" aria-pressed="false">⚔️ Додати до порівняння</button></div>
+      </article>
+      <article class="game-card" data-name="Elden Ring" data-genre="Екшн">
+        <div class="cover"><button class="favorite-toggle" type="button" aria-label="Додати в обрані" title="Додати в обрані">♡</button><img loading="lazy" src="https://cdn.akamai.steamstatic.com/steam/apps/1245620/header.jpg" alt="Обкладинка Elden Ring" onerror="this.style.display='none'"><span class="genre">ЕКШН · RPG</span></div>
+        <div class="card-body"><div class="card-title"><h3>ELDEN RING</h3><span class="rating">★ 9.3</span></div><p>Таємничі землі, складні битви та легенди, які треба розкрити.</p><div class="card-foot"><span>FromSoftware</span><button class="details" data-title="ELDEN RING" data-desc="Пригодницька рольова гра у великому фентезійному світі. Досліджуй локації, розвивай персонажа та долай складних ворогів." data-genre="RPG · Екшн" data-platform="PC, PlayStation, Xbox" data-year="2022" data-link="https://store.steampowered.com/app/1245620/">Детальніше ↗</button></div><button class="compare-add" type="button" aria-pressed="false">⚔️ Додати до порівняння</button></div>
+      </article>
+      <article class="game-card" data-name="Red Dead Redemption 2 RDR2" data-genre="Екшн">
+        <div class="cover"><button class="favorite-toggle" type="button" aria-label="Додати в обрані" title="Додати в обрані">♡</button><img loading="lazy" src="https://cdn.akamai.steamstatic.com/steam/apps/1174180/header.jpg" alt="Обкладинка Red Dead Redemption 2" onerror="this.style.display='none'"><span class="genre">ЕКШН · ПРИГОДИ</span></div>
+        <div class="card-body"><div class="card-title"><h3>Red Dead Redemption 2</h3><span class="rating">★ 9.7</span></div><p>Історія Дикого Заходу з живим світом і незабутніми героями.</p><div class="card-foot"><span>Rockstar Games</span><button class="details" data-title="Red Dead Redemption 2" data-desc="Пригодницький екшн про банду на Дикому Заході. Гра вирізняється деталізованим світом, сюжетом і численними можливостями дослідження." data-genre="Екшн · Пригоди" data-platform="PC, PlayStation, Xbox" data-year="2018" data-link="https://store.steampowered.com/app/1174180/">Детальніше ↗</button></div><button class="compare-add" type="button" aria-pressed="false">⚔️ Додати до порівняння</button></div>
+      </article>
+      <article class="game-card" data-name="Cyberpunk 2077" data-genre="Екшн">
+        <div class="cover"><button class="favorite-toggle" type="button" aria-label="Додати в обрані" title="Додати в обрані">♡</button><img loading="lazy" src="https://cdn.akamai.steamstatic.com/steam/apps/1091500/header.jpg" alt="Обкладинка Cyberpunk 2077" onerror="this.style.display='none'"><span class="genre">ЕКШН · RPG</span></div>
+        <div class="card-body"><div class="card-title"><h3>Cyberpunk 2077</h3><span class="rating">★ 9.1</span></div><p>Мегаполіс майбутнього, імпланти та історія найманця V.</p><div class="card-foot"><span>CD PROJEKT RED</span><button class="details" data-title="Cyberpunk 2077" data-desc="Рольова гра у відкритому світі Найт-Сіті. Виконуй завдання, вдосконалюй персонажа та впливай на розвиток історії." data-genre="ЕКШН · RPG" data-platform="PC, PlayStation, Xbox" data-year="2020" data-link="https://store.steampowered.com/app/1091500/">Детальніше ↗</button></div><button class="compare-add" type="button" aria-pressed="false">⚔️ Додати до порівняння</button></div>
+      </article>
+      <article class="game-card" data-name="The Witcher 3: Wild Hunt" data-genre="Екшн">
+        <div class="cover"><button class="favorite-toggle" type="button" aria-label="Додати в обрані" title="Додати в обрані">♡</button><img loading="lazy" src="https://cdn.akamai.steamstatic.com/steam/apps/292030/header.jpg" alt="Обкладинка The Witcher 3: Wild Hunt" onerror="this.style.display='none'"><span class="genre">ЕКШН · RPG</span></div>
+        <div class="card-body"><div class="card-title"><h3>The Witcher 3: Wild Hunt</h3><span class="rating">★ 9.8</span></div><p>Подорож Ґеральта світом чудовиськ, магії та вибору.</p><div class="card-foot"><span>CD PROJEKT RED</span><button class="details" data-title="The Witcher 3: Wild Hunt" data-desc="Фентезійна рольова пригода про відьмака Ґеральта, який шукає Цірі. Великий світ, сюжетні завдання та наслідки рішень." data-genre="ЕКШН · RPG" data-platform="PC, PlayStation, Xbox, Switch" data-year="2015" data-link="https://store.steampowered.com/app/292030/">Детальніше ↗</button></div><button class="compare-add" type="button" aria-pressed="false">⚔️ Додати до порівняння</button></div>
+      </article>
+      <article class="game-card" data-name="Hogwarts Legacy" data-genre="Екшн">
+        <div class="cover"><button class="favorite-toggle" type="button" aria-label="Додати в обрані" title="Додати в обрані">♡</button><img loading="lazy" src="https://cdn.akamai.steamstatic.com/steam/apps/990080/header.jpg" alt="Обкладинка Hogwarts Legacy" onerror="this.style.display='none'"><span class="genre">ЕКШН · МАГІЯ</span></div>
+        <div class="card-body"><div class="card-title"><h3>Hogwarts Legacy</h3><span class="rating">★ 8.7</span></div><p>Навчайся магії та досліджуй Гоґвортс і його околиці.</p><div class="card-foot"><span>Avalanche Software</span><button class="details" data-title="Hogwarts Legacy" data-desc="Пригодницька рольова гра у чарівному світі XIX століття. Вивчай закляття, досліджуй замок і виконуй завдання." data-genre="ЕКШН · МАГІЯ" data-platform="PC, PlayStation, Xbox, Switch" data-year="2023" data-link="https://store.steampowered.com/app/990080/">Детальніше ↗</button></div><button class="compare-add" type="button" aria-pressed="false">⚔️ Додати до порівняння</button></div>
+      </article>
+      <article class="game-card" data-name="God of War" data-genre="Екшн">
+        <div class="cover"><button class="favorite-toggle" type="button" aria-label="Додати в обрані" title="Додати в обрані">♡</button><img loading="lazy" src="https://cdn.akamai.steamstatic.com/steam/apps/1593500/header.jpg" alt="Обкладинка God of War" onerror="this.style.display='none'"><span class="genre">ЕКШН · ПРИГОДИ</span></div>
+        <div class="card-body"><div class="card-title"><h3>God of War</h3><span class="rating">★ 9.6</span></div><p>Кратос і Атрей вирушають у небезпечну мандрівку.</p><div class="card-foot"><span>Santa Monica Studio</span><button class="details" data-title="God of War" data-desc="Сюжетний екшн про Кратоса та його сина Атрея. Битви, головоломки та подорож світом скандинавських міфів." data-genre="ЕКШН · ПРИГОДИ" data-platform="PC, PlayStation" data-year="2018" data-link="https://store.steampowered.com/app/1593500/">Детальніше ↗</button></div><button class="compare-add" type="button" aria-pressed="false">⚔️ Додати до порівняння</button></div>
+      </article>
+      <article class="game-card" data-name="DOOM Eternal" data-genre="Шутер">
+        <div class="cover"><button class="favorite-toggle" type="button" aria-label="Додати в обрані" title="Додати в обрані">♡</button><img loading="lazy" src="https://cdn.akamai.steamstatic.com/steam/apps/782330/header.jpg" alt="Обкладинка DOOM Eternal" onerror="this.style.display='none'"><span class="genre">ШУТЕР · ЕКШН</span></div>
+        <div class="card-body"><div class="card-title"><h3>DOOM Eternal</h3><span class="rating">★ 9.0</span></div><p>Швидкі битви з демонами та потужний арсенал.</p><div class="card-foot"><span>id Software</span><button class="details" data-title="DOOM Eternal" data-desc="Динамічний шутер від першої особи, у якому потрібно постійно рухатися, перемикати зброю та перемагати демонів." data-genre="ШУТЕР · ЕКШН" data-platform="PC, PlayStation, Xbox, Switch" data-year="2020" data-link="https://store.steampowered.com/app/782330/">Детальніше ↗</button></div><button class="compare-add" type="button" aria-pressed="false">⚔️ Додати до порівняння</button></div>
+      </article>
+      <article class="game-card" data-name="Terraria" data-genre="Пісочниця">
+        <div class="cover"><button class="favorite-toggle" type="button" aria-label="Додати в обрані" title="Додати в обрані">♡</button><img loading="lazy" src="https://cdn.akamai.steamstatic.com/steam/apps/105600/header.jpg" alt="Обкладинка Terraria" onerror="this.style.display='none'"><span class="genre">ПІСОЧНИЦЯ · ПРИГОДИ</span></div>
+        <div class="card-body"><div class="card-title"><h3>Terraria</h3><span class="rating">★ 9.5</span></div><p>Копай, будуй, досліджуй і бийся з босами у 2D-світі.</p><div class="card-foot"><span>Re-Logic</span><button class="details" data-title="Terraria" data-desc="Двовимірна пісочниця з видобутком ресурсів, будівництвом, крафтом, дослідженням підземель і битвами з босами." data-genre="ПІСОЧНИЦЯ · ПРИГОДИ" data-platform="PC, PlayStation, Xbox, Switch, мобільні" data-year="2011" data-link="https://store.steampowered.com/app/105600/">Детальніше ↗</button></div><button class="compare-add" type="button" aria-pressed="false">⚔️ Додати до порівняння</button></div>
+      </article>
+      <article class="game-card" data-name="Stardew Valley" data-genre="Пісочниця">
+        <div class="cover"><button class="favorite-toggle" type="button" aria-label="Додати в обрані" title="Додати в обрані">♡</button><img loading="lazy" src="https://cdn.akamai.steamstatic.com/steam/apps/413150/header.jpg" alt="Обкладинка Stardew Valley" onerror="this.style.display='none'"><span class="genre">ПІСОЧНИЦЯ · ФЕРМА</span></div>
+        <div class="card-body"><div class="card-title"><h3>Stardew Valley</h3><span class="rating">★ 9.4</span></div><p>Вирощуй врожай, знайомся з сусідами та облаштовуй ферму.</p><div class="card-foot"><span>ConcernedApe</span><button class="details" data-title="Stardew Valley" data-desc="Затишна гра про фермерське життя: вирощування рослин, риболовлю, дослідження печер і спілкування з мешканцями містечка." data-genre="ПІСОЧНИЦЯ · ФЕРМА" data-platform="PC, PlayStation, Xbox, Switch, мобільні" data-year="2016" data-link="https://store.steampowered.com/app/413150/">Детальніше ↗</button></div><button class="compare-add" type="button" aria-pressed="false">⚔️ Додати до порівняння</button></div>
+      </article>
+      <article class="game-card" data-name="Need for Speed Heat" data-genre="Гонки">
+        <div class="cover"><button class="favorite-toggle" type="button" aria-label="Додати в обрані" title="Додати в обрані">♡</button><img loading="lazy" src="https://cdn.akamai.steamstatic.com/steam/apps/1222680/header.jpg" alt="Обкладинка Need for Speed Heat" onerror="this.style.display='none'"><span class="genre">ГОНКИ · ВУЛИЦІ</span></div>
+        <div class="card-body"><div class="card-title"><h3>Need for Speed Heat</h3><span class="rating">★ 8.3</span></div><p>Денні заїзди та нічні перегони в Палм-Сіті.</p><div class="card-foot"><span>Ghost Games</span><button class="details" data-title="Need for Speed Heat" data-desc="Аркадні автоперегони з відкритим містом, тюнінгом машин та протистоянням поліції у нічних гонках." data-genre="ГОНКИ · ВУЛИЦІ" data-platform="PC, PlayStation, Xbox" data-year="2019" data-link="https://store.steampowered.com/app/1222680/">Детальніше ↗</button></div><button class="compare-add" type="button" aria-pressed="false">⚔️ Додати до порівняння</button></div>
+      </article>
+      <article class="game-card" data-name="Assetto Corsa" data-genre="Гонки">
+        <div class="cover"><button class="favorite-toggle" type="button" aria-label="Додати в обрані" title="Додати в обрані">♡</button><img loading="lazy" src="https://cdn.akamai.steamstatic.com/steam/apps/244210/header.jpg" alt="Обкладинка Assetto Corsa" onerror="this.style.display='none'"><span class="genre">ГОНКИ · СИМУЛЯТОР</span></div>
+        <div class="card-body"><div class="card-title"><h3>Assetto Corsa</h3><span class="rating">★ 9.0</span></div><p>Реалістичне водіння на трасах із різними автомобілями.</p><div class="card-foot"><span>Kunos Simulazioni</span><button class="details" data-title="Assetto Corsa" data-desc="Автосимулятор із акцентом на фізику керування, гоночні траси, налаштування автомобілів і підтримку керма." data-genre="ГОНКИ · СИМУЛЯТОР" data-platform="PC, PlayStation, Xbox" data-year="2014" data-link="https://store.steampowered.com/app/244210/">Детальніше ↗</button></div><button class="compare-add" type="button" aria-pressed="false">⚔️ Додати до порівняння</button></div>
+      </article>
+      <article class="game-card" data-name="Euro Truck Simulator 2" data-genre="Гонки">
+        <div class="cover"><button class="favorite-toggle" type="button" aria-label="Додати в обрані" title="Додати в обрані">♡</button><img loading="lazy" src="https://cdn.akamai.steamstatic.com/steam/apps/227300/header.jpg" alt="Обкладинка Euro Truck Simulator 2" onerror="this.style.display='none'"><span class="genre">СИМУЛЯТОР · ВОДІННЯ</span></div>
+        <div class="card-body"><div class="card-title"><h3>Euro Truck Simulator 2</h3><span class="rating">★ 9.2</span></div><p>Перевозь вантажі Європою та розвивай власну компанію.</p><div class="card-foot"><span>SCS Software</span><button class="details" data-title="Euro Truck Simulator 2" data-desc="Симулятор далекобійника: подорожуй дорогами Європи, доставляй вантажі, купуй вантажівки та керуй транспортною компанією." data-genre="СИМУЛЯТОР · ВОДІННЯ" data-platform="PC" data-year="2012" data-link="https://store.steampowered.com/app/227300/">Детальніше ↗</button></div><button class="compare-add" type="button" aria-pressed="false">⚔️ Додати до порівняння</button></div>
+      </article>
+      <article class="game-card" data-name="Left 4 Dead 2" data-genre="Шутер">
+        <div class="cover"><button class="favorite-toggle" type="button" aria-label="Додати в обрані" title="Додати в обрані">♡</button><img loading="lazy" src="https://cdn.akamai.steamstatic.com/steam/apps/550/header.jpg" alt="Обкладинка Left 4 Dead 2" onerror="this.style.display='none'"><span class="genre">ШУТЕР · КООПЕРАТИВ</span></div>
+        <div class="card-body"><div class="card-title"><h3>Left 4 Dead 2</h3><span class="rating">★ 9.1</span></div><p>Проривайся крізь орди заражених разом із друзями.</p><div class="card-foot"><span>Valve</span><button class="details" data-title="Left 4 Dead 2" data-desc="Кооперативний шутер, де команда з чотирьох виживальників долає хвилі заражених на шляху до порятунку." data-genre="ШУТЕР · КООПЕРАТИВ" data-platform="PC, Xbox" data-year="2009" data-link="https://store.steampowered.com/app/550/">Детальніше ↗</button></div><button class="compare-add" type="button" aria-pressed="false">⚔️ Додати до порівняння</button></div>
+      </article>
+      <article class="game-card" data-name="Portal 2" data-genre="Шутер">
+        <div class="cover"><button class="favorite-toggle" type="button" aria-label="Додати в обрані" title="Додати в обрані">♡</button><img loading="lazy" src="https://cdn.akamai.steamstatic.com/steam/apps/620/header.jpg" alt="Обкладинка Portal 2" onerror="this.style.display='none'"><span class="genre">ГОЛОВОЛОМКА · ПОРТАЛИ</span></div>
+        <div class="card-body"><div class="card-title"><h3>Portal 2</h3><span class="rating">★ 9.7</span></div><p>Розв’язуй незвичайні головоломки за допомогою порталів.</p><div class="card-foot"><span>Valve</span><button class="details" data-title="Portal 2" data-desc="Головоломка від першої особи з портальною гарматою, фізичними задачами, сюжетом і кооперативним режимом." data-genre="ГОЛОВОЛОМКА · ПОРТАЛИ" data-platform="PC, PlayStation, Xbox, Switch" data-year="2011" data-link="https://store.steampowered.com/app/620/">Детальніше ↗</button></div><button class="compare-add" type="button" aria-pressed="false">⚔️ Додати до порівняння</button></div>
+      </article>
+    </div>
+    <div class="empty" id="empty">Нічого не знайдено. Спробуй іншу назву або жанр.</div>
+  </section>
+
+  <section class="container" id="features">
+    <div class="section-head"><div><div class="eyebrow">Чому GAMEZONE?</div><h2>Твій геймінг. Твій вибір.</h2></div></div>
+    <div class="feature-grid">
+      <div class="feature"><div class="icon">🎯</div><h3>Легко знайти</h3><p>Шукай ігри за назвою або відфільтровуй каталог за жанром.</p></div>
+      <div class="feature"><div class="icon">⭐</div><h3>Рейтинги</h3><p>Порівнюй оцінки в каталозі та обирай, у що зіграти наступного разу.</p></div>
+      <div class="feature"><div class="icon">🕹️</div><h3>Різні жанри</h3><p>Від швидкісних перегонів до тактичних шутерів і великих пригод.</p></div>
+    </div>
+  </section>
+  <div class="container banner"><div><h2>Твоя наступна гра вже чекає.</h2><p>Переглянь каталог і вибери власну пригоду.</p></div><a class="primary" href="#games">До каталогу ↗</a></div>
+</main>
+<footer><div class="container footer-row"><a class="logo" href="#home">GAME<span>ZONE</span></a><span>Навчальний проєкт про світ відеоігор · 2026</span><span>Зроблено з 🎮 та натхненням</span></div></footer>
+<dialog id="gameDialog"><button class="close" id="closeDialog">✕ Закрити</button><div style="color:var(--accent);font-size:12px;letter-spacing:2px;font-weight:900;margin:18px 0 10px">GAMEZONE · ПРО ГРУ</div><h2 id="dialogTitle"></h2><p id="dialogDesc"></p><div class="detail-meta"><div class="meta-box"><small>Жанр</small><strong id="dialogGenre"></strong></div><div class="meta-box"><small>Рік виходу</small><strong id="dialogYear"></strong></div><div class="meta-box" style="grid-column:1/-1"><small>Платформи</small><strong id="dialogPlatform"></strong></div></div><div class="dialog-actions"><a class="dialog-link" id="dialogLink" href="#" target="_blank" rel="noopener noreferrer">Офіційна сторінка ↗</a><button class="secondary" id="closeDialog2" type="button">Назад до каталогу</button></div><p class="dialog-note">Посилання відкривається окремо. Інформаційна сторінка GAMEZONE — навчальний проєкт.</p></dialog>
+<div class="compare-tray" id="compareTray" aria-live="polite"><div class="compare-selection" id="compareSelection">Вибрано 0 із 2 ігор</div><div class="compare-actions"><button type="button" id="compareClear">Очистити</button><button type="button" id="compareOpen" disabled>⚔️ Порівняти</button></div></div>
+<dialog id="compareDialog" aria-label="Порівняння ігор"><div class="compare-heading"><h2>⚔️ Порівняння ігор</h2><button type="button" class="compare-close" id="compareClose">✕ Закрити</button></div><div id="compareContent"></div></dialog>
+<script>
+const search = document.getElementById('search');
+const cards = [...document.querySelectorAll('.game-card')];
+const filterButtons = [...document.querySelectorAll('.filter')];
+const gamesGrid = document.getElementById('gamesGrid');
+const sortGames = document.getElementById('sortGames');
+const originalOrder = [...cards];
+let selectedGenre = 'Усі';
+let favorites = new Set();
+try { favorites = new Set(JSON.parse(localStorage.getItem('gamezone-favorites') || '[]')); } catch(e) {}
+function saveFavorites(){
+  try { localStorage.setItem('gamezone-favorites', JSON.stringify([...favorites])); } catch(e) {}
+  document.getElementById('favoritesCount').textContent = favorites.size;
+  cards.forEach(card=>{
+    const button = card.querySelector('.favorite-toggle');
+    const active = favorites.has(card.dataset.name);
+    button.classList.toggle('active', active);
+    button.textContent = active ? '♥' : '♡';
+    button.setAttribute('aria-label', active ? 'Прибрати з обраних' : 'Додати в обрані');
+    button.title = active ? 'Прибрати з обраних' : 'Додати в обрані';
+  });
+}
+
+function sortGameCards(){
+  const mode = sortGames.value;
+  const sorted = [...cards];
+  if(mode === 'az') sorted.sort((a,b)=>a.querySelector('h3').textContent.localeCompare(b.querySelector('h3').textContent,'uk'));
+  if(mode === 'za') sorted.sort((a,b)=>b.querySelector('h3').textContent.localeCompare(a.querySelector('h3').textContent,'uk'));
+  if(mode === 'rating') sorted.sort((a,b)=>{
+    const ra = parseFloat(a.querySelector('.rating')?.textContent.replace(',', '.').match(/[0-9]+(?:\.[0-9]+)?/)?.[0] || 0);
+    const rb = parseFloat(b.querySelector('.rating')?.textContent.replace(',', '.').match(/[0-9]+(?:\.[0-9]+)?/)?.[0] || 0);
+    return rb - ra;
+  });
+  if(mode === 'default') sorted.splice(0, sorted.length, ...originalOrder);
+  sorted.forEach(card=>gamesGrid.appendChild(card));
+}
+sortGames.addEventListener('change',()=>{sortGameCards();updateGames();});
+
+function updateGames(){
+  const query = search.value.trim().toLocaleLowerCase('uk');
+  let shown = 0;
+  cards.forEach(card=>{
+    const matchesName = card.dataset.name.toLocaleLowerCase('uk').includes(query);
+    const matchesGenre = selectedGenre === 'Усі' || (selectedGenre === 'Обрані' ? favorites.has(card.dataset.name) : card.dataset.genre === selectedGenre);
+    card.style.display = matchesName && matchesGenre ? '' : 'none';
+    if(matchesName && matchesGenre) shown++;
+  });
+  document.getElementById('empty').style.display = shown ? 'none' : 'block';
+}
+cards.forEach(card=>card.querySelector('.favorite-toggle').addEventListener('click',()=>{
+  const name = card.dataset.name;
+  if(favorites.has(name)) favorites.delete(name); else favorites.add(name);
+  saveFavorites();
+  updateGames();
+}));
+saveFavorites();
+search.addEventListener('input',updateGames);
+filterButtons.forEach(btn=>btn.addEventListener('click',()=>{
+  selectedGenre=btn.dataset.genre;
+  filterButtons.forEach(b=>b.classList.toggle('active',b===btn));
+  updateGames();
+}));
+document.getElementById('randomGame').addEventListener('click',()=>{
+  const available = cards.filter(card => card.querySelector('.details'));
+  if (!available.length) return;
+  const chosen = available[Math.floor(Math.random() * available.length)];
+  const detailsButton = chosen.querySelector('.details');
+  detailsButton.click();
+});
+const dialog = document.getElementById('gameDialog');
+document.querySelectorAll('.details').forEach(btn=>btn.addEventListener('click',()=>{
+  document.getElementById('dialogTitle').textContent=btn.dataset.title;
+  document.getElementById('dialogDesc').textContent=btn.dataset.desc;
+  document.getElementById('dialogGenre').textContent=btn.dataset.genre || 'Різні жанри';
+  document.getElementById('dialogYear').textContent=btn.dataset.year || '—';
+  document.getElementById('dialogPlatform').textContent=btn.dataset.platform || 'Залежить від видання';
+  document.getElementById('dialogLink').href=btn.dataset.link || '#';
+  dialog.showModal();
+}));
+document.getElementById('closeDialog').addEventListener('click',()=>dialog.close());
+document.getElementById('closeDialog2').addEventListener('click',()=>dialog.close());
+dialog.addEventListener('click',e=>{if(e.target===dialog)dialog.close()});
+</script>
+<script>
+const themeToggle = document.getElementById('themeToggle');
+function applySavedTheme() {
+  let light = false;
+  try { light = localStorage.getItem('gamezone-theme') === 'light'; } catch(e) {}
+  document.body.classList.toggle('light-theme', light);
+  themeToggle.textContent = light ? '🌙 Темна тема' : '☀️ Світла тема';
+}
+applySavedTheme();
+themeToggle.addEventListener('click', function() {
+  const light = document.body.classList.toggle('light-theme');
+  themeToggle.textContent = light ? '🌙 Темна тема' : '☀️ Світла тема';
+  try { localStorage.setItem('gamezone-theme', light ? 'light' : 'dark'); } catch(e) {}
+});
+</script>
+
+<script>
+/* Плавна поява блоків при прокручуванні сторінки */
+(function(){
+  if (!('IntersectionObserver' in window) || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const items = document.querySelectorAll('.section-head, .feature, .banner');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('gz-visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, {threshold: 0.08, rootMargin:'0px 0px 30px 0px'});
+  items.forEach((el, index) => {
+    el.classList.add('gz-reveal');
+    el.style.transitionDelay = (index % 3) * 75 + 'ms';
+    observer.observe(el);
+  });
+})();
+</script>
+
+<script>
+/* Запуск анімації карток лише при прокручуванні до них */
+(function(){
+ if (!('IntersectionObserver' in window) || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+ const cards=Array.from(document.querySelectorAll('.game-card'));
+ const obs=new IntersectionObserver(entries=>{
+   entries.forEach(entry=>{
+     if(!entry.isIntersecting)return;
+     const card=entry.target;
+     card.classList.remove('gz-card-waiting');
+     card.classList.add('gz-card-show');
+     card.style.animationDelay=((cards.indexOf(card)%3)*140)+'ms';
+     obs.unobserve(card);
+   });
+ },{threshold:.12,rootMargin:'0px 0px -20px 0px'});
+ cards.forEach(card=>{
+   const rect=card.getBoundingClientRect();
+   if(rect.top>window.innerHeight-25){card.classList.add('gz-card-waiting');obs.observe(card);}
+   else {card.classList.add('gz-card-show');}
+ });
+})();
+</script>
+<script>
+/* GAMEZONE v12: вибір двох ігор та таблиця порівняння */
+(function(){
+ const chosen=[];
+ const storageKey='gamezone-compare';
+ function saveChosen(){
+   try { localStorage.setItem(storageKey,JSON.stringify(chosen.map(c=>c.dataset.name))); } catch(e) {}
+ }
+ const tray=document.getElementById('compareTray');
+ const selection=document.getElementById('compareSelection');
+ const open=document.getElementById('compareOpen');
+ const modal=document.getElementById('compareDialog');
+ const content=document.getElementById('compareContent');
+ const buttons=[...document.querySelectorAll('.game-card .compare-add')];
+ const allCards=[...document.querySelectorAll('.game-card')];
+ function refresh(){
+  tray.classList.toggle('open',chosen.length>0);
+  selection.textContent=chosen.length ? 'Вибрано '+chosen.length+' із 2: '+chosen.map(c=>c.querySelector('h3').textContent).join(' + ') : 'Вибрано 0 із 2 ігор';
+  open.disabled=chosen.length!==2;
+  saveChosen();
+  buttons.forEach(b=>{
+   const active=chosen.includes(b.closest('.game-card'));
+   b.classList.toggle('selected',active);
+   b.setAttribute('aria-pressed',String(active));
+   b.textContent=active?'✓ Вибрано — прибрати':'⚔️ Додати до порівняння';
+  });
+ }
+ buttons.forEach(b=>b.addEventListener('click',()=>{
+  const card=b.closest('.game-card');
+  const idx=chosen.indexOf(card);
+  if(idx!==-1)chosen.splice(idx,1);
+  else if(chosen.length<2)chosen.push(card);
+  else {chosen.shift();chosen.push(card);}
+  refresh();
+ }));
+ document.getElementById('compareClear').addEventListener('click',()=>{chosen.length=0;refresh();});
+ function cell(text){const td=document.createElement('td');td.textContent=text||'—';return td;}
+ function row(table,label,values){const tr=document.createElement('tr');const th=document.createElement('th');th.scope='row';th.textContent=label;tr.appendChild(th);values.forEach(v=>tr.appendChild(cell(v)));table.appendChild(tr);}
+ open.addEventListener('click',()=>{
+  if(chosen.length!==2)return;
+  content.replaceChildren();
+  const table=document.createElement('table');table.className='compare-table';
+  const head=document.createElement('tr');const empty=document.createElement('th');empty.textContent='Характеристика';head.appendChild(empty);
+  chosen.forEach(c=>{
+   const th=document.createElement('th');th.scope='col';
+   const src=c.querySelector('.cover img')?.getAttribute('src');
+   if(src){const img=document.createElement('img');img.src=src;img.className='compare-thumb';img.alt='Обкладинка '+c.querySelector('h3').textContent;th.appendChild(img);}
+   const title=document.createElement('div');title.textContent=c.querySelector('h3').textContent;th.appendChild(title);head.appendChild(th);
+  });table.appendChild(head);
+  const detail=chosen.map(c=>c.querySelector('.details'));
+  row(table,'Рейтинг',chosen.map(c=>c.querySelector('.rating')?.textContent.trim()));
+  row(table,'Жанр',detail.map((d,i)=>d?.dataset.genre||chosen[i].dataset.genre));
+  row(table,'Рік виходу',detail.map(d=>d?.dataset.year));
+  row(table,'Платформи',detail.map(d=>d?.dataset.platform));
+  row(table,'Опис',detail.map(d=>d?.dataset.desc));
+  content.appendChild(table);
+  modal.showModal();
+ });
+ document.getElementById('compareClose').addEventListener('click',()=>modal.close());
+ modal.addEventListener('click',e=>{if(e.target===modal)modal.close();});
+ try {
+   const saved=JSON.parse(localStorage.getItem(storageKey)||'[]');
+   if(Array.isArray(saved)) saved.slice(0,2).forEach(name=>{
+     const found=allCards.find(c=>c.dataset.name===name);
+     if(found && !chosen.includes(found))chosen.push(found);
+   });
+ } catch(e) {}
+ refresh();
+})();
+</script>
+<dialog id="gzoneRequirements" aria-labelledby="gzoneReqTitle">
+<button id="gzoneReqClose" class="close" type="button">✕ Закрити</button>
+<h2 id="gzoneReqTitle">🖥️ Системні вимоги</h2>
+<div id="gzoneReqBody"></div>
+</dialog>
+
+<script>
+/* GAMEZONE v14: вимоги з перевірених джерел, без вигаданих характеристик */
+(function(){
+ const known={
+ "Minecraft":{edition:"Minecraft: Java Edition (вимоги 2026, офіційний сайт)",source:"https://www.minecraft.net/en-us/article/minecraft-java-edition-system-requirements",min:{"ОС":"Windows 10/11 64-bit","Процесор":"4-ядерний процесор","ОЗП":"8 ГБ (окрема відеокарта) / 12 ГБ (вбудована)","Відеокарта":"Vulkan 1.3, 2 ГБ VRAM","Диск":"Залежить від версії та світів"},rec:{"ОС":"Windows 10/11 64-bit","Процесор":"Сучасний багатоядерний процесор","ОЗП":"16 ГБ","Відеокарта":"Vulkan 1.3, 6 ГБ VRAM","Диск":"Залежить від версії та світів"}},
+ "Counter-Strike 2":{edition:"CS2 (Steam: офіційно опубліковано тільки мінімальні)",source:"https://store.steampowered.com/app/730/",min:{"ОС":"Windows 10","Процесор":"4 потоки, Intel Core i5-750 або краще","ОЗП":"8 ГБ","Відеокарта":"1 ГБ VRAM, DirectX 11, Shader Model 5.0","Диск":"85 ГБ"},rec:null},
+ "Forza Horizon 5":{edition:"Forza Horizon 5 (Steam)",source:"https://store.steampowered.com/app/1551360/",min:{"ОС":"Windows 10 v18362+","Процесор":"Core i5-4460 / Ryzen 3 1200","ОЗП":"8 ГБ","Відеокарта":"GTX 970 / RX 470 / Arc A380","Диск":"110 ГБ"},rec:{"ОС":"Windows 10 v18362+","Процесор":"Core i5-8400 / Ryzen 5 1500X","ОЗП":"16 ГБ","Відеокарта":"GTX 1070 / RX 590 / Arc A750","Диск":"110 ГБ"}},
+ "Red Dead Redemption 2":{edition:"Red Dead Redemption 2 (Steam)",source:"https://store.steampowered.com/app/1174180/",min:{"ОС":"Windows 10 64-bit","Процесор":"Core i5-2500K / FX-6300","ОЗП":"8 ГБ","Відеокарта":"GTX 770 2 ГБ / R9 280 3 ГБ","Диск":"150 ГБ"},rec:{"ОС":"Windows 10 64-bit","Процесор":"Core i7-4770K / Ryzen 5 1500X","ОЗП":"12 ГБ","Відеокарта":"GTX 1060 6 ГБ / RX 480 4 ГБ","Диск":"150 ГБ"}},
+ "God of War":{edition:"God of War (2018, ПК-версія, Steam)",source:"https://store.steampowered.com/app/1593500/",min:{"ОС":"Windows 10 64-bit","Процесор":"Core i5-2500K / Ryzen 3 1200","ОЗП":"8 ГБ","Відеокарта":"GTX 960 4 ГБ / R9 290X 4 ГБ","Диск":"70 ГБ"},rec:{"ОС":"Windows 10 64-bit","Процесор":"Core i5-6600K / Ryzen 5 2400G","ОЗП":"8 ГБ","Відеокарта":"GTX 1060 6 ГБ / RX 570 4 ГБ","Диск":"70 ГБ"}},
+ "DOOM Eternal":{edition:"DOOM Eternal (Steam)",source:"https://store.steampowered.com/app/782330/",min:{"ОС":"Windows 10 64-bit","Процесор":"Core i5 3.3 ГГц / Ryzen 3 3.1 ГГц","ОЗП":"8 ГБ","Відеокарта":"GTX 1050 Ti 4 ГБ / GTX 1060 3 ГБ / RX 470 4 ГБ","Диск":"80 ГБ"},rec:{"ОС":"Windows 10 64-bit","Процесор":"Core i7-6700K / Ryzen 7 1800X","ОЗП":"8 ГБ","Відеокарта":"GTX 1060 6 ГБ / GTX 970 4 ГБ / RX 480 8 ГБ","Диск":"80 ГБ"}},
+ "Terraria":{edition:"Terraria (Steam)",source:"https://store.steampowered.com/app/105600/",min:{"ОС":"Windows 10 (для Steam)","Процесор":"2.0 ГГц","ОЗП":"2.5 ГБ","Відеокарта":"128 МБ VRAM, Shader Model 2.0+","Диск":"200 МБ"},rec:{"ОС":"Windows 10 (для Steam)","Процесор":"2 ядра, 3.0 ГГц","ОЗП":"4 ГБ","Відеокарта":"256 МБ VRAM, Shader Model 2.0+","Диск":"200 МБ"}},
+ "Need for Speed Heat":{edition:"Need for Speed Heat (Steam)",source:"https://store.steampowered.com/app/1222680/",min:{"ОС":"Windows 10 64-bit","Процесор":"Core i5-3570 / FX-6350","ОЗП":"8 ГБ","Відеокарта":"GTX 760 / Radeon HD 7970 / R9 280X","Диск":"50 ГБ"},rec:{"ОС":"Windows 10 64-bit","Процесор":"Core i7-4790 / Ryzen 3 1300X","ОЗП":"16 ГБ","Відеокарта":"GTX 1060 / RX 480","Диск":"50 ГБ"}},
+ "Assetto Corsa":{edition:"Assetto Corsa (2014, Steam)",source:"https://store.steampowered.com/app/244210/",min:{"ОС":"Windows 10 (для Steam)","Процесор":"Core 2 Duo 2.4 ГГц / Athlon X2 2.8 ГГц","ОЗП":"2 ГБ","Відеокарта":"DirectX 10.1, напр. Radeon HD 6450 / GeForce GT 460","Диск":"15 ГБ"},rec:{"ОС":"Windows 10 (для Steam)","Процесор":"Intel 4 ядра / AMD 6 ядер","ОЗП":"6 ГБ","Відеокарта":"GTX 970 / Radeon R9 290X","Диск":"30 ГБ"}},
+ "Left 4 Dead 2":{edition:"Left 4 Dead 2 (Steam)",source:"https://store.steampowered.com/app/550/",min:{"ОС":"Windows 10 (для Steam)","Процесор":"Pentium 4 3.0 ГГц","ОЗП":"2 ГБ","Відеокарта":"128 МБ VRAM, Shader Model 2.0, GeForce 6600","Диск":"13 ГБ"},rec:{"ОС":"Windows 10 (для Steam)","Процесор":"Core 2 Duo 2.4 ГГц","ОЗП":"2 ГБ","Відеокарта":"GeForce 7600 / Radeon X1600, Shader Model 3.0","Диск":"13 ГБ"}},
+ "Portal 2":{edition:"Portal 2 (Steam: лише мінімальні)",source:"https://store.steampowered.com/app/620/",min:{"ОС":"Windows 10 (для Steam)","Процесор":"Pentium 4 3.0 ГГц / Dual Core 2.0 ГГц","ОЗП":"2 ГБ","Відеокарта":"128 МБ VRAM, Pixel Shader 2.0b, GeForce 7600 / Intel HD 2000","Диск":"8 ГБ"},rec:null},
+ 'Grand Theft Auto V':{
+  edition:'GTA V Enhanced (окрема версія від GTA V Legacy)',
+  source:'https://store.rockstargames.com/ru/game/buy-gta-v',
+  min:{'ОС':'Windows 10','Процесор':'Intel Core i7-4770 / AMD FX-9590','ОЗП':'8 ГБ','Відеокарта':'GTX 1630 4 ГБ / RX 6400 4 ГБ','Диск':'105 ГБ, SSD'},
+  rec:{'ОС':'Windows 11','Процесор':'Intel Core i5-9600K / Ryzen 5 3600','ОЗП':'16 ГБ','Відеокарта':'RTX 3060 8 ГБ / RX 6600 XT 8 ГБ','Диск':'105 ГБ, SSD з DirectStorage'}
+ },
+ 'Cyberpunk 2077':{
+ edition:'Cyberpunk 2077 (версія 2.0+, без трасування променів)',
+ source:'https://support.cdprojektred.com/en/cyberpunk%20/pc/sp-technical/issue/1556/cyberpunk-2077-system-requirements',
+ min:{'ОС':'Windows 10 64-bit','Процесор':'Core i7-6700 / Ryzen 5 1600','ОЗП':'12 ГБ','Відеокарта':'GTX 1060 6 ГБ / RX 580 8 ГБ / Arc A380','Диск':'70 ГБ SSD'},
+ rec:{'ОС':'Windows 10 64-bit','Процесор':'Core i7-12700 / Ryzen 7 7800X3D','ОЗП':'16 ГБ','Відеокарта':'RTX 2060 SUPER / RX 5700 XT / Arc A770','Диск':'70 ГБ SSD'}
+ },
+ 'ELDEN RING':{
+ edition:'ELDEN RING (Steam)',
+ source:'https://store.steampowered.com/app/1245620/',
+ min:{'ОС':'Windows 10','Процесор':'Core i5-8400 / Ryzen 3 3300X','ОЗП':'12 ГБ','Відеокарта':'GTX 1060 3 ГБ / RX 580 4 ГБ','Диск':'60 ГБ'},
+ rec:{'ОС':'Windows 10/11','Процесор':'Core i7-8700K / Ryzen 5 3600X','ОЗП':'16 ГБ','Відеокарта':'GTX 1070 8 ГБ / RX Vega 56 8 ГБ','Диск':'60 ГБ'}
+ },
+ 'Hogwarts Legacy':{
+ edition:'Hogwarts Legacy (Steam)',
+ source:'https://store.steampowered.com/app/990080/',
+ min:{'ОС':'Windows 10 64-bit','Процесор':'Core i5-6600 / Ryzen 5 1400','ОЗП':'16 ГБ','Відеокарта':'GTX 960 4 ГБ / RX 470 4 ГБ','Диск':'85 ГБ, SSD бажано'},
+ rec:{'ОС':'Windows 10 64-bit','Процесор':'Core i7-8700 / Ryzen 5 3600','ОЗП':'16 ГБ','Відеокарта':'GTX 1080 Ti / RX 5700 XT / Arc A770','Диск':'85 ГБ SSD'}
+ },
+ 'Euro Truck Simulator 2':{
+ edition:'Euro Truck Simulator 2 (базова гра, Steam)',
+ source:'https://store.steampowered.com/app/227300/',
+ min:{'ОС':'Windows 10 64-bit','Процесор':'Core i5-6400 / Ryzen 3 1200','ОЗП':'8 ГБ','Відеокарта':'GTX 660 / RX 460 / Intel HD 630','Диск':'25 ГБ'},
+ rec:{'ОС':'Windows 10 64-bit','Процесор':'Core i5-9600 / Ryzen 5 3600','ОЗП':'12 ГБ','Відеокарта':'GTX 1660 / RX 590','Диск':'25 ГБ'}
+ },
+ 'Stardew Valley':{
+ edition:'Stardew Valley (Steam; офіційно вказані лише мінімальні вимоги)',
+ source:'https://store.steampowered.com/app/413150/',
+ min:{'ОС':'Windows (для клієнта Steam — Windows 10+)','Процесор':'2 ГГц','ОЗП':'2 ГБ','Відеокарта':'256 МБ відеопамʼяті, Shader Model 3.0+','Диск':'500 МБ'},
+ rec:null
+ },
+ 'The Witcher 3: Wild Hunt':{
+  edition:'The Witcher 3: Wild Hunt (вимоги зі Steam)',
+  source:'https://store.steampowered.com/app/292030/',
+  min:{'ОС':'Windows 7/8 64-bit (за сторінкою Steam)','Процесор':'Core i5-2500K / AMD A10-5800K','ОЗП':'6 ГБ','Відеокарта':'GTX 660 / Radeon HD 7870','Диск':'50 ГБ'},
+  rec:{'ОС':'Windows 10/11 64-bit','Процесор':'Core i5-7400 / Ryzen 5 1600','ОЗП':'8 ГБ','Відеокарта':'GTX 1070 / Radeon RX 480','Диск':'50 ГБ'}
+ }
+ };
+ const modal=document.getElementById('gzoneRequirements');
+ const body=document.getElementById('gzoneReqBody');
+ const heading=document.getElementById('gzoneReqTitle');
+ function para(parent,label,value){
+  const p=document.createElement('p');const b=document.createElement('strong');b.textContent=label+': ';p.append(b,document.createTextNode(value));parent.appendChild(p);
+ }
+ function openRequirements(card){
+  const title=card.querySelector('h3').textContent.trim();
+  const detail=card.querySelector('.details');
+  const info=known[title];
+  const link=info?.source||detail?.dataset.link||'';
+  heading.textContent='🖥️ Системні вимоги — '+title;
+  body.replaceChildren();
+  if(info){
+   const note=document.createElement('p');note.textContent=info.edition;body.appendChild(note);
+   const grid=document.createElement('div');grid.className='gzone-req-grid';
+   for(const [label,data] of [['Мінімальні',info.min],['Рекомендовані',info.rec]]){
+    const panel=document.createElement('section');panel.className='gzone-req-panel';panel.style.padding='14px';
+    const h=document.createElement('h3');h.textContent=label;panel.appendChild(h);
+    if(data) Object.entries(data).forEach(([k,v])=>para(panel,k,v)); else para(panel,'Статус','Офіційно не опубліковані окремі рекомендовані вимоги');grid.appendChild(panel);
+   }
+   body.appendChild(grid);
+  }else{
+   const note=document.createElement('p');
+   note.textContent='Для цієї гри характеристики поки не перевірені. Переглянь офіційні вимоги за посиланням нижче — не будемо показувати неперевірені цифри.';
+   body.appendChild(note);
+  }
+  if(link){
+   const a=document.createElement('a');a.href=link;a.target='_blank';a.rel='noopener noreferrer';a.className='gzone-req-link';
+   a.textContent='🔗 Перевірити системні вимоги на офіційній сторінці ↗';body.appendChild(a);
+  }
+  modal.showModal();
+ }
+ // Кнопки у заголовках двох ігор таблиці порівняння
+ const compare=document.getElementById('compareDialog');
+ const observer=new MutationObserver(()=>{
+  const heads=[...compare.querySelectorAll('.compare-table thead th')];
+  if(!heads.length){
+   const first=compare.querySelector('.compare-table > tr:first-child');
+   if(!first)return;
+  }
+  const columns=[...compare.querySelectorAll('.compare-table tr:first-child th')].slice(1);
+  columns.forEach(th=>{
+   if(th.querySelector('.gzone-req-btn'))return;
+   const title=th.querySelector('div')?.textContent.trim();
+   const card=[...document.querySelectorAll('.game-card')].find(c=>c.querySelector('h3')?.textContent.trim()===title);
+   if(!card)return;
+   const btn=document.createElement('button');btn.type='button';btn.className='gzone-req-btn';btn.textContent='🖥️ Системні вимоги';
+   btn.addEventListener('click',()=>openRequirements(card));th.appendChild(btn);
+  });
+ });
+ observer.observe(document.getElementById('compareContent'),{childList:true,subtree:false});
+ document.getElementById('gzoneReqClose').addEventListener('click',()=>modal.close());
+ modal.addEventListener('click',e=>{if(e.target===modal)modal.close();});
+})();
+</script>
+</body>
+</html>
